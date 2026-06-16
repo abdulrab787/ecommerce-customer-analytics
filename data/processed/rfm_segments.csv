@@ -1,0 +1,6 @@
+Customer_Segment,Recency,Frequency,Monetary,R_Score,F_Score,M_Score,RFM_Score,Segment
+College Students,0,33533,17243247161,3,4,5,12,High Value
+Premium Shoppers,0,33071,16893770924,3,1,1,5,Low Value
+Tier 2 City Customers,0,33091,17072782747,3,2,2,7,Low Value
+Working Women,0,33413,17215043588,3,3,3,9,Medium Value
+Youth,0,33557,17225401651,3,5,4,12,High Value
