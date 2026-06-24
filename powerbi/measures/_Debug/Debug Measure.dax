@@ -1,0 +1,28 @@
+------------------------
+-- Measure: [Raw Clicks]
+------------------------
+MEASURE 'Measure''s'[Raw Clicks] = SUM(campaign_data[clicks])
+    , DisplayFolder = "_Debug"
+    , FormatString = "0"
+
+-----------------------------
+-- Measure: [Raw Conversions]
+-----------------------------
+MEASURE 'Measure''s'[Raw Conversions] = SUM(campaign_data[conversions])
+    , DisplayFolder = "_Debug"
+    , FormatString = "0"
+
+-----------------------
+-- Measure: [Raw Leads]
+-----------------------
+MEASURE 'Measure''s'[Raw Leads] = SUM(campaign_data[leads])
+    , DisplayFolder = "_Debug"
+    , FormatString = "0"
+
+--------------------------------
+-- Measure: [Debug_Churn_Counts]
+--------------------------------
+MEASURE 'Measure''s'[Debug_Churn_Counts] = 
+    "Churned = " & SUM(churn_predictions[churn]) &
+    " | Total = " & COUNTROWS(churn_predictions)
+    , DisplayFolder = "_Debug"

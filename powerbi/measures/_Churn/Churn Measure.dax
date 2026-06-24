@@ -1,0 +1,63 @@
+------------------------------------
+-- Measure: [Conversions by Channel]
+------------------------------------
+MEASURE 'Measure''s'[Conversions by Channel] = 
+    CALCULATE(
+        [Total Conversions],
+        ALLEXCEPT(campaign_data, campaign_data[channel_used])
+    )
+    , DisplayFolder = "_Channel"
+    , FormatString = "0"
+
+------------------------------
+-- Measure: [Leads by Channel]
+------------------------------
+MEASURE 'Measure''s'[Leads by Channel] = 
+    CALCULATE(
+        [Total Leads],
+        ALLEXCEPT(campaign_data, campaign_data[channel_used])
+    )
+    , DisplayFolder = "_Channel"
+    , FormatString = "0"
+
+--------------------------------
+-- Measure: [Revenue by Channel]
+--------------------------------
+MEASURE 'Measure''s'[Revenue by Channel] = 
+    CALCULATE(
+        [Total Revenue],
+        ALLEXCEPT(campaign_data, campaign_data[channel_used])
+    )
+    , DisplayFolder = "_Channel"
+
+--------------------------
+-- Measure: [CampaignType]
+--------------------------
+MEASURE 'Measure''s'[CampaignType] = DISTINCT( campaign_data[campaign_type] )
+    , DisplayFolder = "_Channel"
+
+---------------------------------------
+-- Measure: [Churn Prediction Accuracy]
+---------------------------------------
+MEASURE 'Measure''s'[Churn Prediction Accuracy] = 
+    DIVIDE(
+        SUMX(
+            churn_predictions,
+            IF(churn_predictions[churn] = churn_predictions[Churn_Prediction], 1, 0)
+        ),
+        COUNTROWS(churn_predictions)
+    )
+    , DisplayFolder = "_Channel"
+
+--------------------------------
+-- Measure: [Campaign Row Count]
+--------------------------------
+MEASURE 'Measure''s'[Campaign Row Count] = COUNTROWS(campaign_data)
+    , DisplayFolder = "_Channel"
+    , FormatString = "0"
+
+------------------------
+-- Measure: [Churn Loss]
+------------------------
+MEASURE 'Measure''s'[Churn Loss] = [Churn Rate] * [CLV Uplift]
+    , DisplayFolder = "_Channel"

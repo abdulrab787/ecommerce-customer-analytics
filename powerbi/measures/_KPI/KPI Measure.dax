@@ -1,0 +1,250 @@
+------------------------------
+-- Measure: [Churned Customer]
+------------------------------
+MEASURE 'Measure''s'[Churned Customer] = 
+    SUM(churn_predictions[Churn_Prediction]
+    
+    )
+    , DisplayFolder = "_KPI"
+    , FormatString = "0"
+
+------------------------------
+-- Measure: [Conversion Value]
+------------------------------
+MEASURE 'Measure''s'[Conversion Value] = AVERAGE(campaign_data[conversions])
+    , DisplayFolder = "_KPI"
+
+--------------------------------
+-- Measure: [Revenue % of Total]
+--------------------------------
+MEASURE 'Measure''s'[Revenue % of Total] = 
+    DIVIDE(
+        [Total Revenue],
+        CALCULATE( [Total Revenue], ALL( campaign_data[customer_segment] ) )
+    )
+    , DisplayFolder = "_KPI"
+
+------------------------------------
+-- Measure: [Revenue per Conversion]
+------------------------------------
+MEASURE 'Measure''s'[Revenue per Conversion] = 
+    DIVIDE(
+        [Total Revenue],
+        [Total Conversions]
+    )
+    , DisplayFolder = "_KPI"
+
+------------------------------
+-- Measure: [Revenue per Lead]
+------------------------------
+MEASURE 'Measure''s'[Revenue per Lead] = 
+    DIVIDE(
+        [Total Revenue],
+        [Total Leads]
+    )
+    , DisplayFolder = "_KPI"
+
+-------------------------------
+-- Measure: [Total Conversions]
+-------------------------------
+MEASURE 'Measure''s'[Total Conversions] = SUM(campaign_data[conversions])
+    , DisplayFolder = "_KPI"
+    , FormatString = "0"
+
+-------------------------
+-- Measure: [Total Leads]
+-------------------------
+MEASURE 'Measure''s'[Total Leads] = SUM(campaign_data[leads])
+    , DisplayFolder = "_KPI"
+    , FormatString = "0"
+
+---------------------
+-- Measure: [Avg CTR]
+---------------------
+MEASURE 'Measure''s'[Avg CTR] = 
+    AVERAGEX(
+        VALUES(campaign_data[campaign_id]),
+        DIVIDE(MAX(campaign_data[clicks]), MAX(campaign_data[impressions]))
+    )
+    , DisplayFolder = "_KPI"
+
+---------------------
+-- Measure: [Avg CVR]
+---------------------
+MEASURE 'Measure''s'[Avg CVR] = 
+    AVERAGEX(
+        VALUES(campaign_data[campaign_id]),
+        DIVIDE(MAX(campaign_data[conversions]), MAX(campaign_data[clicks]))
+    )
+    , DisplayFolder = "_KPI"
+
+----------------------------------
+-- Measure: [RPC by Campaign Type]
+----------------------------------
+MEASURE 'Measure''s'[RPC by Campaign Type] = 
+    CALCULATE(
+        [Revenue per Click],
+        ALLEXCEPT(campaign_data, campaign_data[campaign_type])
+    )
+    , DisplayFolder = "_KPI"
+
+---------------------
+-- Measure: [Avg RPC]
+---------------------
+MEASURE 'Measure''s'[Avg RPC] = 
+    AVERAGEX(
+        VALUES(campaign_data[campaign_id]),
+        DIVIDE(
+            MAX(campaign_data[conversions]) * [Conversion Value],
+            MAX(campaign_data[clicks])
+        )
+    )
+    , DisplayFolder = "_KPI"
+
+---------------------
+-- Measure: [Avg CPC]
+---------------------
+MEASURE 'Measure''s'[Avg CPC] = 
+    AVERAGEX(
+        VALUES(campaign_data[campaign_id]),
+        DIVIDE(
+            MAX(campaign_data[acquisition_cost]),
+            MAX(campaign_data[clicks])
+        )
+    )
+    , DisplayFolder = "_KPI"
+
+---------------------
+-- Measure: [Avg CPL]
+---------------------
+MEASURE 'Measure''s'[Avg CPL] = 
+    AVERAGEX(
+        VALUES(campaign_data[campaign_id]),
+        DIVIDE(MAX(campaign_data[acquisition_cost]), MAX(campaign_data[leads]))
+    )
+    , DisplayFolder = "_KPI"
+
+---------------------
+-- Measure: [Avg CPA]
+---------------------
+MEASURE 'Measure''s'[Avg CPA] = 
+    AVERAGEX(
+        VALUES(campaign_data[campaign_id]),
+        DIVIDE(MAX(campaign_data[acquisition_cost]), MAX(campaign_data[conversions]))
+    )
+    , DisplayFolder = "_KPI"
+
+------------------------------
+-- Measure: [Engagement Score]
+------------------------------
+MEASURE 'Measure''s'[Engagement Score] = 
+    DIVIDE(
+        AVERAGE(campaign_data[engagement_score]),
+        15
+    )
+    , DisplayFolder = "_KPI"
+
+------------------------
+-- Measure: [Churn Rate]
+------------------------
+MEASURE 'Measure''s'[Churn Rate] = 
+    VAR Churned =
+        CALCULATE(
+            SUM(churn_predictions[churn])
+        )
+    VAR Total =
+        CALCULATE(
+            COUNTROWS(churn_predictions)
+        )
+    RETURN
+    DIVIDE(Churned, Total, 0)
+    , DisplayFolder = "_KPI"
+
+---------------------
+-- Measure: [Avg CLV]
+---------------------
+MEASURE 'Measure''s'[Avg CLV] = AVERAGE(clv_segments[CLV_discounted])
+    , DisplayFolder = "_KPI"
+
+--------------------------------
+-- Measure: [Avg Retention Rate]
+--------------------------------
+MEASURE 'Measure''s'[Avg Retention Rate] = AVERAGE(clv_segments[Retention_Rate])
+    , DisplayFolder = "_KPI"
+
+---------------------------
+-- Measure: [AVG_RFM_Score]
+---------------------------
+MEASURE 'Measure''s'[AVG_RFM_Score] = 
+    AVERAGEX(
+        VALUES(campaign_data[customer_segment]),
+        [RFM_Score]
+    )
+    , DisplayFolder = "_KPI"
+
+---------------------
+-- Measure: [Avg ROI]
+---------------------
+MEASURE 'Measure''s'[Avg ROI] = 
+    AVERAGE(campaign_data[roi]
+    )
+    , DisplayFolder = "_KPI"
+
+--------------------------
+-- Measure: [Avg Monetary]
+--------------------------
+MEASURE 'Measure''s'[Avg Monetary] = AVERAGE(rfm_segments[Monetary])
+    , DisplayFolder = "_KPI"
+
+---------------------------
+-- Measure: [Avg Frequency]
+---------------------------
+MEASURE 'Measure''s'[Avg Frequency] = AVERAGE(rfm_segments[Frequency])
+    , DisplayFolder = "_KPI"
+
+------------------------------------
+-- Measure: [Avg CLV by RFM Segment]
+------------------------------------
+MEASURE 'Measure''s'[Avg CLV by RFM Segment] = 
+    CALCULATE(
+        AVERAGE(clv_segments[CLV_discounted]),
+        TREATAS(VALUES(rfm_segments[Customer_Segment]), clv_segments[customer_segment])
+    )
+    , DisplayFolder = "_KPI"
+
+-----------------------------------------------
+-- Measure: [Avg Retention Rate by RFM Segment]
+-----------------------------------------------
+MEASURE 'Measure''s'[Avg Retention Rate by RFM Segment] = 
+    CALCULATE(
+        AVERAGE(clv_segments[Retention_Rate]),
+        TREATAS(VALUES(rfm_segments[Customer_Segment]), clv_segments[customer_segment])
+    )
+    , DisplayFolder = "_KPI"
+
+----------------------------
+-- Measure: [Retention Rate]
+----------------------------
+MEASURE 'Measure''s'[Retention Rate] = 1 - [Churn Rate]
+    , DisplayFolder = "_KPI"
+
+-------------------------------
+-- Measure: [Avg CLV (Churned)]
+-------------------------------
+MEASURE 'Measure''s'[Avg CLV (Churned)] = 
+    CALCULATE(
+        AVERAGE(clv_segments[CLV_discounted]),
+        churn_predictions[churn] = 1,
+        TREATAS(VALUES(churn_predictions[customer_segment]), clv_segments[customer_segment])
+    )
+    , DisplayFolder = "_KPI"
+
+-----------------------------------
+-- Measure: [Churn‑Adjusted Profit]
+-----------------------------------
+MEASURE 'Measure''s'[Churn‑Adjusted Profit] = 
+    SUMX(
+        clv_segments,
+        clv_segments[CLV_discounted] * (1 - AVERAGE(churn_predictions[churn]))
+    )
+    , DisplayFolder = "_KPI"

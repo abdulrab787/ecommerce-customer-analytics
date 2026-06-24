@@ -1,0 +1,21 @@
+---------------------------
+-- Measure: [Total Revenue]
+---------------------------
+MEASURE 'Measure''s'[Total Revenue] = SUM(campaign_data[revenue])
+    , DisplayFolder = "_Revenue"
+
+-------------------------------
+-- Measure: [Revenue per Click]
+-------------------------------
+MEASURE 'Measure''s'[Revenue per Click] = 
+    DIVIDE(
+        [Total Revenue],
+        [Total Clicks]
+    )
+    , DisplayFolder = "_Revenue"
+
+-----------------
+-- Measure: [RPC]
+-----------------
+MEASURE 'Measure''s'[RPC] = DIVIDE([Total Revenue], [Total Clicks])
+    , DisplayFolder = "_Revenue"

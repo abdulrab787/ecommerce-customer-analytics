@@ -1,0 +1,52 @@
+-------------------------------
+-- Measure: [Total Impressions]
+-------------------------------
+MEASURE 'Measure''s'[Total Impressions] = 
+    SUMX(
+        VALUES(campaign_data[campaign_id]),
+        MAX(campaign_data[impressions])
+    )
+    , DisplayFolder = "_Performance"
+    , FormatString = "0"
+
+-----------------
+-- Measure: [CTR]
+-----------------
+MEASURE 'Measure''s'[CTR] = DIVIDE([Total Clicks], SUM(campaign_data[impressions]))
+    , DisplayFolder = "_Performance"
+
+-----------------------------
+-- Measure: [Conversion Rate]
+-----------------------------
+MEASURE 'Measure''s'[Conversion Rate] = DIVIDE([Total Conversions], [Total Clicks])
+    , DisplayFolder = "_Performance"
+
+-----------------------
+-- Measure: [Lead Rate]
+-----------------------
+MEASURE 'Measure''s'[Lead Rate] = 
+    DIVIDE(
+        [Total Leads],
+        [Total Clicks]
+    )
+    , DisplayFolder = "_Performance"
+
+--------------------------
+-- Measure: [Total Clicks]
+--------------------------
+MEASURE 'Measure''s'[Total Clicks] = SUM(campaign_data[clicks])
+    , DisplayFolder = "_Performance"
+    , FormatString = "0"
+
+-----------------------------------------
+-- Measure: [Universal Performance Color]
+-----------------------------------------
+MEASURE 'Measure''s'[Universal Performance Color] = 
+    SWITCH(
+        [Performance Segment],
+        "High", "#2ECC71",
+        "Medium", "#F1C40F",
+        "Low", "#E74C3C",
+        "#7F8C8D"
+    )
+    , DisplayFolder = "_Performance"

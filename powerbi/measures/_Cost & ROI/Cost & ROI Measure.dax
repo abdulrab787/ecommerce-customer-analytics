@@ -1,0 +1,86 @@
+---------------------------------
+-- Measure: [Cost per Conversion]
+---------------------------------
+MEASURE 'Measure''s'[Cost per Conversion] = 
+    DIVIDE(
+        [Total Spend],
+        [Total Conversions]
+    )
+    , DisplayFolder = "_Cost & ROI"
+
+-----------------
+-- Measure: [CPL]
+-----------------
+MEASURE 'Measure''s'[CPL] = DIVIDE([Total Spend], [Total Leads])
+    , DisplayFolder = "_Cost & ROI"
+
+-----------------
+-- Measure: [ROI]
+-----------------
+MEASURE 'Measure''s'[ROI] = 
+    DIVIDE(
+        [Total Revenue] - [Total Spend],
+        [Total Spend]
+    )
+    , DisplayFolder = "_Cost & ROI"
+
+------------------
+-- Measure: [ROAS]
+------------------
+MEASURE 'Measure''s'[ROAS] = 
+    DIVIDE(
+        [Total Revenue],
+        [Total Spend]
+    )
+    , DisplayFolder = "_Cost & ROI"
+
+-------------------------
+-- Measure: [Total Spend]
+-------------------------
+MEASURE 'Measure''s'[Total Spend] = SUM(campaign_data[acquisition_cost])
+    , DisplayFolder = "_Cost & ROI"
+
+-----------------
+-- Measure: [CPA]
+-----------------
+MEASURE 'Measure''s'[CPA] = DIVIDE([Total Spend], [Total Conversions])
+    , DisplayFolder = "_Cost & ROI"
+
+----------------------------------
+-- Measure: [Predicted Churn Rate]
+----------------------------------
+MEASURE 'Measure''s'[Predicted Churn Rate] = 
+    DIVIDE(
+        SUM(churn_predictions[Churn_Prediction]),
+        COUNTROWS(churn_predictions)
+    )
+    , DisplayFolder = "_Cost & ROI"
+
+---------------------------
+-- Measure: [Marketing ROI]
+---------------------------
+MEASURE 'Measure''s'[Marketing ROI] = DIVIDE([Total Revenue], SUM(campaign_data[acquisition_cost]))
+    , DisplayFolder = "_Cost & ROI"
+
+---------------------------
+-- Measure: [Lifetime Loss]
+---------------------------
+MEASURE 'Measure''s'[Lifetime Loss] = 
+    SUMX(
+        clv_segments,
+        clv_segments[CLV_discounted] * AVERAGE(churn_predictions[churn])
+    )
+    , DisplayFolder = "_Cost & ROI"
+
+------------------------
+-- Measure: [CLV Uplift]
+------------------------
+MEASURE 'Measure''s'[CLV Uplift] = [M_Monetary]
+    , DisplayFolder = "_Cost & ROI"
+    , FormatString = "0"
+
+------------------------
+-- Measure: [Net Profit]
+------------------------
+MEASURE 'Measure''s'[Net Profit] = [Total Revenue] + [CLV Uplift] - [Churn Loss]
+    , DisplayFolder = "_Cost & ROI"

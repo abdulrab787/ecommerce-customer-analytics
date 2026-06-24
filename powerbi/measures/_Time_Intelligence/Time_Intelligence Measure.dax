@@ -1,0 +1,99 @@
+-------------------------
+-- Measure: [Revenue MoM]
+-------------------------
+MEASURE 'Measure''s'[Revenue MoM] = 
+    CALCULATE(
+        [Total Revenue],
+        DATEADD('Date'[Date], -1, MONTH)
+    )
+    , DisplayFolder = "_Time Intelligence"
+
+---------------------------
+-- Measure: [Revenue MoM %]
+---------------------------
+MEASURE 'Measure''s'[Revenue MoM %] = 
+    DIVIDE(
+        [Total Revenue] - [Revenue MoM],
+        [Revenue MoM]
+    )
+    , DisplayFolder = "_Time Intelligence"
+
+-------------------------
+-- Measure: [Revenue MTD]
+-------------------------
+MEASURE 'Measure''s'[Revenue MTD] = 
+    CALCULATE(
+        [Total Revenue],
+        DATESMTD('Date'[Date])
+    )
+    , DisplayFolder = "_Time Intelligence"
+
+-------------------------
+-- Measure: [Revenue QTD]
+-------------------------
+MEASURE 'Measure''s'[Revenue QTD] = 
+    CALCULATE(
+        [Total Revenue],
+        DATESQTD('Date'[Date])
+    )
+    , DisplayFolder = "_Time Intelligence"
+
+-------------------------
+-- Measure: [Revenue YoY]
+-------------------------
+MEASURE 'Measure''s'[Revenue YoY] = 
+    CALCULATE(
+        [Total Revenue],
+        SAMEPERIODLASTYEAR('Date'[Date])
+    )
+    , DisplayFolder = "_Time Intelligence"
+
+---------------------------
+-- Measure: [Revenue YoY %]
+---------------------------
+MEASURE 'Measure''s'[Revenue YoY %] = 
+    DIVIDE(
+        [Total Revenue] - [Revenue YoY],
+        [Revenue YoY]
+    )
+    , DisplayFolder = "_Time Intelligence"
+
+-------------------------
+-- Measure: [Revenue YTD]
+-------------------------
+MEASURE 'Measure''s'[Revenue YTD] = 
+    CALCULATE(
+        [Total Revenue],
+        DATESYTD('Date'[Date])
+    )
+    , DisplayFolder = "_Time Intelligence"
+
+---------------------------------
+-- Measure: [Rolling 12M Revenue]
+---------------------------------
+MEASURE 'Measure''s'[Rolling 12M Revenue] = 
+    CALCULATE(
+        [Total Revenue],
+        DATESINPERIOD('Date'[Date], MAX('Date'[Date]), -12, MONTH)
+    )
+    , DisplayFolder = "_Time Intelligence"
+
+---------------------------------
+-- Measure: [Rolling 30D Revenue]
+---------------------------------
+MEASURE 'Measure''s'[Rolling 30D Revenue] = 
+    CALCULATE(
+        [Total Revenue],
+        DATESINPERIOD('Date'[Date], MAX('Date'[Date]), -30, DAY)
+    )
+    , DisplayFolder = "_Time Intelligence"
+
+---------------------------------
+-- Measure: [Rolling 90D Revenue]
+---------------------------------
+MEASURE 'Measure''s'[Rolling 90D Revenue] = 
+    CALCULATE(
+        [Total Revenue],
+        DATESINPERIOD('Date'[Date], MAX('Date'[Date]), -90, DAY)
+    )
+    , DisplayFolder = "_Time Intelligence"

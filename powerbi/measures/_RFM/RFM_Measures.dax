@@ -1,0 +1,201 @@
+-----------------------
+-- Measure: [Frequency]
+-----------------------
+MEASURE 'Measure''s'[Frequency] = AVERAGE(rfm_segments[Frequency])
+    , DisplayFolder = "_RFM"
+
+----------------------
+-- Measure: [Monetary]
+----------------------
+MEASURE 'Measure''s'[Monetary] = AVERAGE(rfm_segments[Monetary])
+    , DisplayFolder = "_RFM"
+
+---------------------
+-- Measure: [F Score]
+---------------------
+MEASURE 'Measure''s'[F Score] = AVERAGE(rfm_segments[F_Score])
+    , DisplayFolder = "_RFM"
+
+---------------------
+-- Measure: [M Score]
+---------------------
+MEASURE 'Measure''s'[M Score] = AVERAGE(rfm_segments[M_Score])
+    , DisplayFolder = "_RFM"
+
+-------------------------------
+-- Measure: [RFM Segment Count]
+-------------------------------
+MEASURE 'Measure''s'[RFM Segment Count] = COUNTROWS(rfm_segments)
+    , DisplayFolder = "_RFM"
+    , FormatString = "0"
+
+-------------------------------
+-- Measure: [RFM Heatmap Score]
+-------------------------------
+MEASURE 'Measure''s'[RFM Heatmap Score] = 
+    [Frequency] * 0.4 +
+    [Monetary] * 0.6
+    , DisplayFolder = "_RFM"
+
+-------------------------------
+-- Measure: [RFM_Heatmap_Color]
+-------------------------------
+MEASURE 'Measure''s'[RFM_Heatmap_Color] = 
+    VAR Score = [RFM_Score]
+    RETURN
+    SWITCH(
+        TRUE(),
+        Score >= 12, "#2ECC71",   -- Green (High Value)
+        Score >= 8,  "#F1C40F",   -- Yellow (Medium Value)
+        "#E74C3C"                 -- Red (Low Value)
+    )
+    , DisplayFolder = "_RFM"
+
+---------------------------------------
+-- Measure: [Churn Rate by RFM Segment]
+---------------------------------------
+MEASURE 'Measure''s'[Churn Rate by RFM Segment] = 
+    CALCULATE(
+        DIVIDE(
+            SUM(churn_predictions[churn]),
+            COUNTROWS(churn_predictions)
+        ),
+        TREATAS(VALUES(rfm_segments[Customer_Segment]), churn_predictions[customer_segment])
+    )
+    , DisplayFolder = "_RFM"
+
+------------------------------------------------------
+-- Measure: [Churn Prediction Accuracy by RFM Segment]
+------------------------------------------------------
+MEASURE 'Measure''s'[Churn Prediction Accuracy by RFM Segment] = 
+    CALCULATE(
+        DIVIDE(
+            SUMX(
+                churn_predictions,
+                IF(churn_predictions[churn] = churn_predictions[Churn_Prediction], 1, 0)
+            ),
+            COUNTROWS(churn_predictions)
+        ),
+        TREATAS(VALUES(rfm_segments[Customer_Segment]), churn_predictions[customer_segment])
+    )
+    , DisplayFolder = "_RFM"
+
+-----------------------
+-- Measure: [R_Recency]
+-----------------------
+MEASURE 'Measure''s'[R_Recency] = AVERAGE(campaign_data[Recency])
+    , DisplayFolder = "_RFM"
+
+---------------------
+-- Measure: [R_Score]
+---------------------
+MEASURE 'Measure''s'[R_Score] = 
+    VAR RankR =
+        RANKX(
+            ALLSELECTED(campaign_data),
+            [R_Recency],
+            ,
+            ASC
+        )
+    VAR TotalSeg =
+        CALCULATE(
+            DISTINCTCOUNT(campaign_data[customer_segment]),
+            ALLSELECTED(campaign_data)
+        )
+    VAR Quantile = DIVIDE(RankR, TotalSeg)
+    RETURN
+    SWITCH(
+        TRUE(),
+        Quantile <= 1/3, 5,
+        Quantile <= 2/3, 3,
+        1
+    )
+    , DisplayFolder = "_RFM"
+    , FormatString = "0"
+
+-----------------------
+-- Measure: [RFM_Score]
+-----------------------
+MEASURE 'Measure''s'[RFM_Score] = [R_Score] + [F_Score] + [M_Score]
+    , DisplayFolder = "_RFM"
+    , FormatString = "0"
+
+-------------------------
+-- Measure: [F_Frequency]
+-------------------------
+MEASURE 'Measure''s'[F_Frequency] = COUNTROWS(campaign_data)
+    , DisplayFolder = "_RFM"
+    , FormatString = "0"
+
+---------------------
+-- Measure: [F_Score]
+---------------------
+MEASURE 'Measure''s'[F_Score] = 
+    VAR RankF =
+        RANKX(
+            ALLSELECTED(campaign_data),
+            [F_Frequency],
+            ,
+            DESC
+        )
+    VAR TotalSeg =
+        CALCULATE(
+            DISTINCTCOUNT(campaign_data[customer_segment]),
+            ALLSELECTED(campaign_data)
+        )
+    VAR Quantile = DIVIDE(RankF, TotalSeg)
+    RETURN
+    SWITCH(
+        TRUE(),
+        Quantile <= 1/3, 5,
+        Quantile <= 2/3, 3,
+        1
+    )
+    , DisplayFolder = "_RFM"
+    , FormatString = "0"
+
+------------------------
+-- Measure: [M_Monetary]
+------------------------
+MEASURE 'Measure''s'[M_Monetary] = SUM(campaign_data[conversions])
+    , DisplayFolder = "_RFM"
+    , FormatString = "0"
+
+---------------------
+-- Measure: [M_Score]
+---------------------
+MEASURE 'Measure''s'[M_Score] = 
+    VAR RankM =
+        RANKX(
+            ALLSELECTED(campaign_data),
+            [M_Monetary],
+            ,
+            DESC
+        )
+    VAR TotalSeg =
+        CALCULATE(
+            DISTINCTCOUNT(campaign_data[customer_segment]),
+            ALLSELECTED(campaign_data)
+        )
+    VAR Quantile = DIVIDE(RankM, TotalSeg)
+    RETURN
+    SWITCH(
+        TRUE(),
+        Quantile <= 1/3, 5,
+        Quantile <= 2/3, 3,
+        1
+    )
+    , DisplayFolder = "_RFM"
+    , FormatString = "0"
+
+-------------------------
+-- Measure: [RFM_Segment]
+-------------------------
+MEASURE 'Measure''s'[RFM_Segment] = 
+    SWITCH(
+        TRUE(),
+        [RFM_Score] >= 12, "High Value",
+        [RFM_Score] >= 8,  "Medium Value",
+        "Low Value"
+    )
+    , DisplayFolder = "_RFM"

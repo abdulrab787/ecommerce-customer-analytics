@@ -1,0 +1,17 @@
+-----------------------------
+-- Measure: [Format Currency]
+-----------------------------
+MEASURE 'Measure''s'[Format Currency] = FORMAT([Total Revenue], "$#,0.00")
+    , DisplayFolder = "_Formatting"
+
+-------------------------------
+-- Measure: [Format Percentage]
+-------------------------------
+MEASURE 'Measure''s'[Format Percentage] = FORMAT([Conversion Rate], "0.00%")
+    , DisplayFolder = "_Formatting"
+
+---------------------------------
+-- Measure: [Format Whole Number]
+---------------------------------
+MEASURE 'Measure''s'[Format Whole Number] = FORMAT([Total Leads], "#,0")
+    , DisplayFolder = "_Formatting"

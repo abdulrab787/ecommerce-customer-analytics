@@ -1,0 +1,37 @@
+-------------------------------------
+-- Measure: [Conversions per Segment]
+-------------------------------------
+MEASURE 'Measure''s'[Conversions per Segment] = 
+    CALCULATE(
+        [Total Conversions],
+        ALLEXCEPT(campaign_data, campaign_data[customer_segment])
+    )
+    , DisplayFolder = "_Segmentation"
+    , FormatString = "0"
+
+-------------------------------
+-- Measure: [Leads per Segment]
+-------------------------------
+MEASURE 'Measure''s'[Leads per Segment] = 
+    CALCULATE(
+        [Total Leads],
+        ALLEXCEPT(campaign_data, campaign_data[customer_segment])
+    )
+    , DisplayFolder = "_Segmentation"
+    , FormatString = "0"
+
+---------------------------------
+-- Measure: [Revenue per Segment]
+---------------------------------
+MEASURE 'Measure''s'[Revenue per Segment] = 
+    CALCULATE(
+        [Total Revenue],
+        ALLEXCEPT(campaign_data, campaign_data[customer_segment])
+    )
+    , DisplayFolder = "_Segmentation"
+
+-----------------------------
+-- Measure: [CustomerSegment]
+-----------------------------
+MEASURE 'Measure''s'[CustomerSegment] = DISTINCT( campaign_data[customer_segment] )
+    , DisplayFolder = "_Segmentation"
