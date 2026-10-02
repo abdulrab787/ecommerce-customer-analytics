@@ -1,0 +1,136 @@
+// ===========================================================================
+// CORRECTED MEASURES  -  paste into Tabular Editor / DAX query view
+// Validated against the live model on 2026-10-02 (results in docs/PROJECT_AUDIT.md)
+// Recommendation: replace the expressions of the existing measures with the
+// same name so every visual picks up the fix automatically.
+// ===========================================================================
+
+// ---- 1. Spend: acquisition_cost is a PER-CONVERSION cost --------------------
+// OLD: SUM(campaign_data[acquisition_cost])  -> Rs.62.7M (99.8% understated)
+// NEW: Rs.29.13B   (matches source ROI column definition)
+MEASURE 'Measure''s'[Total Spend] =
+    SUMX ( campaign_data, campaign_data[acquisition_cost] * campaign_data[conversions] )
+    , DisplayFolder = "_Cost & ROI", FormatString = "#,0"
+
+// ROI / ROAS / CPA / CPL / Marketing ROI now flow from the fixed [Total Spend]
+// OLD ROI = 136,543%   NEW ROI = 194.0%   (ROAS 2.94x)
+MEASURE 'Measure''s'[ROI]  = DIVIDE ( [Total Revenue] - [Total Spend], [Total Spend] )
+    , DisplayFolder = "_Cost & ROI", FormatString = "0.0%"
+MEASURE 'Measure''s'[ROAS] = DIVIDE ( [Total Revenue], [Total Spend] )
+    , DisplayFolder = "_Cost & ROI", FormatString = "0.00x"
+MEASURE 'Measure''s'[CPA]  = DIVIDE ( [Total Spend], [Total Conversions] )
+    , DisplayFolder = "_Cost & ROI", FormatString = "#,0.00"
+// [Marketing ROI] is a duplicate of ROAS -> delete it, or point it to [ROAS]
+// [Cost per Conversion] and [Avg CPA] duplicate [CPA] -> keep one
+
+// ---- 2. Impressions / per-campaign averages --------------------------------
+// OLD: SUMX(VALUES(id), MAX(impressions)) has NO context transition, so MAX
+//      returns the max of the whole filter context for every id: 16.67B (true 9.18B)
+MEASURE 'Measure''s'[Total Impressions] = SUM ( campaign_data[impressions] )
+    , DisplayFolder = "_Performance", FormatString = "#,0"
+
+// Same bug in Avg CTR / Avg CVR / Avg CPC / Avg CPL / Avg CPA / Avg RPC.
+// campaign_data is one row per campaign, so iterate the table directly:
+MEASURE 'Measure''s'[Avg CTR] =
+    AVERAGEX ( campaign_data, DIVIDE ( campaign_data[clicks], campaign_data[impressions] ) )
+    , DisplayFolder = "_KPI", FormatString = "0.00%"
+MEASURE 'Measure''s'[Avg CVR] =
+    AVERAGEX ( campaign_data, DIVIDE ( campaign_data[conversions], campaign_data[clicks] ) )
+    , DisplayFolder = "_KPI", FormatString = "0.00%"
+// Prefer ratio-of-sums ([CTR], [Conversion Rate]) on cards - an average of
+// ratios gives a small campaign the same weight as a huge one.
+
+// ---- 3. Profit ----------------------------------------------------------------
+// OLD [Net Profit] = Revenue + CLV Uplift - Churn Loss  (spend never subtracted,
+//      CLV Uplift = total conversions mislabelled as money) -> Rs.85.65B > revenue
+MEASURE 'Measure''s'[Contribution after Media] = [Total Revenue] - [Total Spend]
+    , DisplayFolder = "_Cost & ROI", FormatString = "#,0"
+// Waterfall: Revenue -> (-) Media Spend -> Contribution. Add COGS if a margin %
+// is ever available; do not mix CLV (a forecast) with booked revenue (an actual).
+
+// ---- 4. Performance Score on a real 0-100 scale -----------------------------
+// OLD score ~11,000 for every campaign type (all "High"). NEW: index vs the
+// current selection: 50 = average, >60 high, <40 low.
+MEASURE 'Measure''s'[Performance Score] =
+    VAR _ctr  = DIVIDE ( [CTR],             CALCULATE ( [CTR],             ALLSELECTED ( campaign_data ) ) )
+    VAR _cvr  = DIVIDE ( [Conversion Rate], CALCULATE ( [Conversion Rate], ALLSELECTED ( campaign_data ) ) )
+    VAR _roas = DIVIDE ( [ROAS],            CALCULATE ( [ROAS],            ALLSELECTED ( campaign_data ) ) )
+    VAR _cpa  = DIVIDE ( CALCULATE ( [CPA], ALLSELECTED ( campaign_data ) ), [CPA] )
+    VAR _idx  = 0.2 * _ctr + 0.3 * _cvr + 0.3 * _roas + 0.2 * _cpa
+    RETURN MIN ( 100, MAX ( 0, 50 * _idx ) )
+    , DisplayFolder = "_Performance", FormatString = "0.0"
+MEASURE 'Measure''s'[Performance Segment] =
+    VAR s = [Performance Score]
+    RETURN SWITCH ( TRUE (), ISBLANK ( s ), BLANK (), s >= 55, "High", s >= 45, "Medium", "Low" )
+    , DisplayFolder = "_Performance"
+
+// ---- 5. Recency must not use TODAY() ----------------------------------------
+// Calculated column campaign_data[Recency]: TODAY() makes every number change
+// daily and every refresh irreproducible. Anchor to the data's last date:
+//   Recency = DATEDIFF ( campaign_data[date], MAX ( campaign_data[date] ), DAY )
+
+// ===========================================================================
+// DATA QUALITY PAGE  (load reports/dq/dq_results.csv as table dq_results)
+// ===========================================================================
+MEASURE 'Measure''s'[DQ Checks]          = COUNTROWS ( dq_results )
+    , DisplayFolder = "_Data Quality", FormatString = "0"
+MEASURE 'Measure''s'[DQ Failed]          = CALCULATE ( COUNTROWS ( dq_results ), dq_results[status] = "FAIL" ) + 0
+    , DisplayFolder = "_Data Quality", FormatString = "0"
+MEASURE 'Measure''s'[DQ Warnings]        = CALCULATE ( COUNTROWS ( dq_results ), dq_results[status] = "WARN" ) + 0
+    , DisplayFolder = "_Data Quality", FormatString = "0"
+MEASURE 'Measure''s'[DQ Critical Failed] =
+    CALCULATE ( COUNTROWS ( dq_results ), dq_results[status] = "FAIL", dq_results[severity] = "critical" ) + 0
+    , DisplayFolder = "_Data Quality", FormatString = "0"
+MEASURE 'Measure''s'[DQ Pass Rate]       = DIVIDE ( CALCULATE ( COUNTROWS ( dq_results ), dq_results[status] = "PASS" ), [DQ Checks] )
+    , DisplayFolder = "_Data Quality", FormatString = "0.0%"
+MEASURE 'Measure''s'[DQ Last Run]        = MAX ( dq_results[run_ts] )
+    , DisplayFolder = "_Data Quality"
+MEASURE 'Measure''s'[DQ Banner] =
+    IF ( [DQ Critical Failed] > 0,
+         "DATA NOT CERTIFIED - " & [DQ Critical Failed] & " critical check(s) failing",
+         "Data certified - " & FORMAT ( [DQ Pass Rate], "0%" ) & " of checks pass" )
+    , DisplayFolder = "_Data Quality"
+MEASURE 'Measure''s'[DQ Banner Color] = IF ( [DQ Critical Failed] > 0, "#C0392B", "#1E8449" )
+    , DisplayFolder = "_Data Quality"
+
+// In-model reconciliation (no external file needed) ---------------------------
+MEASURE 'Measure''s'[DQ Fact Rows vs Ids] =
+    COUNTROWS ( campaign_data ) - DISTINCTCOUNT ( campaign_data[campaign_id] )      // must be 0
+    , DisplayFolder = "_Data Quality", FormatString = "0"
+MEASURE 'Measure''s'[DQ Orphan Dates] =
+    COUNTROWS ( FILTER ( campaign_data, ISBLANK ( RELATED ( 'Date'[Date] ) ) ) ) + 0  // must be 0
+    , DisplayFolder = "_Data Quality", FormatString = "0"
+MEASURE 'Measure''s'[DQ ROI Recon Diff] =                                            // must be ~0
+    ABS ( [ROI] - DIVIDE ( SUM ( campaign_data[revenue] ) - [Total Spend], [Total Spend] ) )
+    , DisplayFolder = "_Data Quality", FormatString = "0.0000"
+
+// ===========================================================================
+// EXPERIMENT DECISIONS PAGE
+// (load reports/experiments/experiment_decisions.csv  -> experiment_decisions
+//       reports/experiments/experiment_metrics.csv    -> experiment_metrics)
+// ===========================================================================
+MEASURE 'Measure''s'[Experiments Run]   = COUNTROWS ( experiment_decisions )
+    , DisplayFolder = "_Experiments", FormatString = "0"
+MEASURE 'Measure''s'[Experiments Shipped] =
+    CALCULATE ( COUNTROWS ( experiment_decisions ),
+                experiment_decisions[decision] IN { "SHIP", "SHIP WITH MONITORING" } ) + 0
+    , DisplayFolder = "_Experiments", FormatString = "0"
+MEASURE 'Measure''s'[Ship Rate]         = DIVIDE ( [Experiments Shipped], [Experiments Run] )
+    , DisplayFolder = "_Experiments", FormatString = "0%"
+MEASURE 'Measure''s'[Invalid Tests]     =
+    CALCULATE ( COUNTROWS ( experiment_decisions ), experiment_decisions[decision] = "INVALID" ) + 0
+    , DisplayFolder = "_Experiments", FormatString = "0"
+MEASURE 'Measure''s'[Shipped Annual Margin Impact] =
+    CALCULATE ( SUM ( experiment_decisions[annual_margin_impact] ),
+                experiment_decisions[decision] IN { "SHIP", "SHIP WITH MONITORING" } )
+    , DisplayFolder = "_Experiments", FormatString = "#,0"
+MEASURE 'Measure''s'[Margin Loss Avoided] =                 // value of saying NO
+    - CALCULATE ( SUM ( experiment_decisions[annual_margin_impact] ),
+                  experiment_decisions[decision] = "DO NOT SHIP",
+                  experiment_decisions[annual_margin_impact] < 0 )
+    , DisplayFolder = "_Experiments", FormatString = "#,0"
+MEASURE 'Measure''s'[Decision Color] =
+    SWITCH ( SELECTEDVALUE ( experiment_decisions[decision] ),
+             "SHIP", "#1E8449", "SHIP WITH MONITORING", "#58D68D", "DO NOT SHIP", "#C0392B",
+             "INVALID", "#7F8C8D", "KEEP RUNNING", "#F1C40F", "#F39C12" )
+    , DisplayFolder = "_Experiments"

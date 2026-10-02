@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+*.duckdb
+# Power BI local cache (if you move to PBIP)
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+experiments/data/

@@ -1,0 +1,100 @@
+# ---------------------------------------------------------------------------
+# Data-quality rules  —  ecommerce-customer-analytics
+# Run:  python -m src.data_quality.runner --config config/dq_rules.yml
+# Severity: critical (blocks publish) | high (fix before release) | warning
+# ---------------------------------------------------------------------------
+run:
+  output_dir: reports/dq
+  fail_on: [critical]          # exit code 1 if any of these severities fail
+
+tables:
+  raw_campaigns:               # the three brand files, unioned, with a platform column
+    union:
+      - {path: data/raw/nykaa_campaign_data.csv,   platform: Nykaa}
+      - {path: data/raw/purplle_campaign_data.csv, platform: Purplle}
+      - {path: data/raw/tira_campaign_data.csv,    platform: Tira}
+    lowercase_columns: true
+    date_column: date
+    date_format: "%d-%m-%Y"
+  campaign_data:               # = table loaded into Power BI
+    path: data/processed/campaign_data_cleaned.csv
+    date_column: date
+  churn_predictions:
+    path: data/processed/churn_predictions.csv
+  rfm_segments:
+    path: data/processed/rfm_segments.csv
+  clv_segments:
+    path: data/processed/clv_segments.csv
+
+checks:
+  # 1. Duplicate records ------------------------------------------------------
+  - {type: duplicate_records, table: raw_campaigns, key: [campaign_id]}
+  - {type: duplicate_records, table: raw_campaigns, ignore_cols: [campaign_id], severity: high}
+  - {type: duplicate_records, table: campaign_data, key: [campaign_id]}
+
+  # 2. Null checks + accepted values -----------------------------------------
+  - type: null_check
+    table: campaign_data
+    columns: [campaign_id, campaign_type, channel_used, impressions, clicks, leads,
+              conversions, revenue, acquisition_cost, customer_segment, date]
+  - type: null_check
+    table: campaign_data
+    columns: [platform]        # brand dimension must survive cleaning
+  - type: accepted_values
+    table: campaign_data
+    column: campaign_type
+    values: [Email, Influencer, Paid Ads, SEO, Social Media]
+
+  # 3. Referential integrity -------------------------------------------------
+  - {type: referential_integrity, child: churn_predictions, parent: campaign_data,
+     child_key: campaign_id, parent_key: campaign_id}
+  - {type: referential_integrity, child: campaign_data, parent: rfm_segments,
+     child_key: customer_segment, parent_key: Customer_Segment}
+  - {type: referential_integrity, child: campaign_data, parent: clv_segments,
+     child_key: customer_segment, parent_key: customer_segment}
+
+  # 4. Date validity ---------------------------------------------------------
+  - {type: date_validity, table: raw_campaigns, column: date, format: "%d-%m-%Y",
+     min_date: "2024-01-01"}
+  - {type: date_validity, table: campaign_data, column: date, min_date: "2024-01-01"}
+
+  # 5. Negative values & business rules -------------------------------------
+  - type: non_negative
+    table: campaign_data
+    columns: [impressions, clicks, leads, conversions, revenue, acquisition_cost, duration]
+  - {type: business_rule, table: campaign_data, name: funnel_clicks,      expression: "clicks <= impressions"}
+  - {type: business_rule, table: campaign_data, name: funnel_leads,       expression: "leads <= clicks"}
+  - {type: business_rule, table: campaign_data, name: funnel_conversions, expression: "conversions <= leads"}
+  - {type: business_rule, table: campaign_data, name: aov_band, severity: warning,
+     expression: "revenue / conversions >= 50 and revenue / conversions <= 5000"}
+  - {type: business_rule, table: campaign_data, name: engagement_range, severity: warning,
+     expression: "engagement_score >= 0 and engagement_score <= 100"}
+
+  # 6. Duplicate joins (one-side keys must be unique) -----------------------
+  - {type: join_key_uniqueness, table: rfm_segments, key: Customer_Segment}
+  - {type: join_key_uniqueness, table: clv_segments, key: customer_segment}
+  - {type: join_key_uniqueness, table: churn_predictions, key: campaign_id}
+  - {type: cardinality, table: campaign_data, column: channel_used, max_distinct: 10}
+
+  # 7. Unexpected row multiplication -----------------------------------------
+  - {type: row_count_match, a: raw_campaigns, b: campaign_data}
+  - {type: row_count_match, a: campaign_data, b: churn_predictions}
+  - {type: row_multiplication, left: campaign_data, right: rfm_segments,
+     on_left: customer_segment, on_right: Customer_Segment}
+  - {type: row_multiplication, left: campaign_data, right: churn_predictions,
+     on_left: campaign_id, on_right: campaign_id}
+
+  # 8. KPI reconciliation ---------------------------------------------------
+  - {type: kpi_reconciliation, a: raw_campaigns, b: campaign_data}      # raw vs processed
+  - {type: roi_formula, table: raw_campaigns}                            # stored roi == definition
+  - {type: label_balance, table: churn_predictions, column: churn, min_minority_pct: 0.05}
+  - {type: column_consistency, table: campaign_data, col_a: target_audience,
+     col_b: customer_segment, max_mismatch_pct: 0.05}
+
+  # 9. Source-to-report validation -------------------------------------------
+  - type: source_to_report
+    source: raw_campaigns
+    snapshot: reports/dq/powerbi_kpi_snapshot.csv      # produced by powerbi/dq/kpi_snapshot.dax
+    tolerance_pct: 0.005
+    kpis: [campaign_rows, total_revenue, total_spend, roi, roas, total_impressions,
+           total_clicks, total_conversions, ctr, avg_ctr, conversion_rate, cpa, net_profit]
