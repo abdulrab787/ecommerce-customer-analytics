@@ -1,0 +1,11 @@
+{
+  "label": "roi < train P25 (underperforming campaign)",
+  "roi_threshold": 0.04,
+  "positive_rate": 0.2476,
+  "train_rows": 117084,
+  "test_rows": 49581,
+  "test_auc": 0.4996,
+  "test_precision": 0.2442,
+  "test_recall": 0.2389,
+  "interpretation": "AUC near 0.5 means pre-launch attributes do not predict which campaigns underperform."
+}

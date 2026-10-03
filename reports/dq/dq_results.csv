@@ -1,66 +1,66 @@
 run_ts,check_id,check,category,table,rule,severity,passed,observed,expected,failing_rows,detail,sample,status
-2026-10-02 05:45:18,DQ001,duplicate_records,Duplicate records,raw_campaigns,['campaign_id'] is unique,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ002,duplicate_records,Duplicate records,raw_campaigns,no full-row duplicates (ignoring ['campaign_id']),high,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ003,duplicate_records,Duplicate records,campaign_data,['campaign_id'] is unique,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ004,null_check,Null checks,campaign_data,campaign_id null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ005,null_check,Null checks,campaign_data,campaign_type null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ006,null_check,Null checks,campaign_data,channel_used null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ007,null_check,Null checks,campaign_data,impressions null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ008,null_check,Null checks,campaign_data,clicks null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ009,null_check,Null checks,campaign_data,leads null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ010,null_check,Null checks,campaign_data,conversions null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ011,null_check,Null checks,campaign_data,revenue null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ012,null_check,Null checks,campaign_data,acquisition_cost null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ013,null_check,Null checks,campaign_data,customer_segment null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ014,null_check,Null checks,campaign_data,date null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ015,null_check,Null checks,campaign_data,column 'platform' exists,critical,False,,,0,column missing from table,,FAIL
-2026-10-02 05:45:18,DQ016,accepted_values,Null checks,campaign_data,"campaign_type in ['Email', 'Influencer', 'Paid Ads', 'SEO', 'Social Media']",high,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ017,referential_integrity,Referential integrity,churn_predictions,churn_predictions.campaign_id -> campaign_data.campaign_id,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ018,referential_integrity,Referential integrity,campaign_data,campaign_data.customer_segment -> rfm_segments.Customer_Segment,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ019,referential_integrity,Referential integrity,campaign_data,campaign_data.customer_segment -> clv_segments.customer_segment,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ020,date_validity,Date validity,raw_campaigns,date parses as %d-%m-%Y,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ021,date_validity,Date validity,raw_campaigns,"date within [2024-01-01, today]",critical,True,0.0,0.0,0,observed range 2024-07-01 00:00:00 .. 2025-06-24 00:00:00,,PASS
-2026-10-02 05:45:18,DQ022,date_validity,Date validity,campaign_data,date parses as ISO,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ023,date_validity,Date validity,campaign_data,"date within [2024-01-01, today]",critical,True,0.0,0.0,0,observed range 2024-07-01 00:00:00 .. 2025-06-24 00:00:00,,PASS
-2026-10-02 05:45:18,DQ024,negative_values,Negative values,campaign_data,impressions >= 0,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ025,negative_values,Negative values,campaign_data,clicks >= 0,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ026,negative_values,Negative values,campaign_data,leads >= 0,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ027,negative_values,Negative values,campaign_data,conversions >= 0,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ028,negative_values,Negative values,campaign_data,revenue >= 0,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ029,negative_values,Negative values,campaign_data,acquisition_cost >= 0,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ030,negative_values,Negative values,campaign_data,duration >= 0,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ031,business_rule,Negative values,campaign_data,funnel_clicks: clicks <= impressions,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ032,business_rule,Negative values,campaign_data,funnel_leads: leads <= clicks,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ033,business_rule,Negative values,campaign_data,funnel_conversions: conversions <= leads,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ034,business_rule,Negative values,campaign_data,aov_band: revenue / conversions >= 50 and revenue / conversions <= 5000,warning,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ035,business_rule,Negative values,campaign_data,engagement_range: engagement_score >= 0 and engagement_score <= 100,warning,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ036,duplicate_joins,Duplicate joins,rfm_segments,'one' side key rfm_segments.Customer_Segment is unique,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ037,duplicate_joins,Duplicate joins,clv_segments,'one' side key clv_segments.customer_segment is unique,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ038,duplicate_joins,Duplicate joins,churn_predictions,'one' side key churn_predictions.campaign_id is unique,critical,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ039,cardinality,Duplicate joins,campaign_data,channel_used distinct <= 10,warning,False,156.0,10.0,0,multi-valued attribute? split into a bridge table,,WARN
-2026-10-02 05:45:18,DQ040,row_multiplication,Unexpected row multiplication,campaign_data,row count campaign_data == raw_campaigns (±0.0%),critical,True,166665.0,166665.0,0,,,PASS
-2026-10-02 05:45:18,DQ041,row_multiplication,Unexpected row multiplication,churn_predictions,row count churn_predictions == campaign_data (±0.0%),critical,True,166665.0,166665.0,0,,,PASS
-2026-10-02 05:45:18,DQ042,row_multiplication,Unexpected row multiplication,campaign_data,left join campaign_data->rfm_segments on customer_segment keeps rows (ratio <= 1.0),critical,True,1.0,1.0,0,"166,665 rows before, 166,665 after",,PASS
-2026-10-02 05:45:18,DQ043,row_multiplication,Unexpected row multiplication,campaign_data,left join campaign_data->churn_predictions on campaign_id keeps rows (ratio <= 1.0),critical,True,1.0,1.0,0,"166,665 rows before, 166,665 after",,PASS
-2026-10-02 05:45:18,DQ044,kpi_reconciliation,KPI reconciliation,campaign_rows: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,166665.0,166665.0,0,relative diff 0.0000%,,PASS
-2026-10-02 05:45:18,DQ045,kpi_reconciliation,KPI reconciliation,total_revenue: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,85650246071.0,85650246071.0,0,relative diff 0.0000%,,PASS
-2026-10-02 05:45:18,DQ046,kpi_reconciliation,KPI reconciliation,total_spend: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,29128207786.129997,29128207786.129997,0,relative diff 0.0000%,,PASS
-2026-10-02 05:45:18,DQ047,kpi_reconciliation,KPI reconciliation,total_conversions: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,171513099.0,171513099.0,0,relative diff 0.0000%,,PASS
-2026-10-02 05:45:18,DQ048,kpi_reconciliation,KPI reconciliation,total_clicks: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,780386787.0,780386787.0,0,relative diff 0.0000%,,PASS
-2026-10-02 05:45:18,DQ049,kpi_reconciliation,KPI reconciliation,total_impressions: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,9176717247.0,9176717247.0,0,relative diff 0.0000%,,PASS
-2026-10-02 05:45:18,DQ050,kpi_reconciliation,KPI reconciliation,raw_campaigns,roi == (revenue - cost*conversions)/(cost*conversions),high,True,0.0,0.0,0,,,PASS
-2026-10-02 05:45:18,DQ051,label_balance,KPI reconciliation,churn_predictions,churn minority class >= 5%,high,False,0.000216,0.05,0,"class shares {1: 0.99978, 0: 0.00022}",,FAIL
-2026-10-02 05:45:18,DQ052,column_consistency,Source-to-report validation,campaign_data,target_audience == customer_segment (mismatch <= 5%),warning,False,0.8007,0.05,133452,,,WARN
-2026-10-02 05:45:18,DQ053,source_to_report,Source-to-report validation,powerbi,Power BI [campaign_rows] == source (±0.5%),critical,True,166665.0,166665.0,0,relative diff 0.00%,,PASS
-2026-10-02 05:45:18,DQ054,source_to_report,Source-to-report validation,powerbi,Power BI [total_revenue] == source (±0.5%),critical,True,85650246071.0,85650246071.0,0,relative diff 0.00%,,PASS
-2026-10-02 05:45:18,DQ055,source_to_report,Source-to-report validation,powerbi,Power BI [total_spend] == source (±0.5%),critical,False,62681853.33,29128207786.129997,0,relative diff 99.78%,,FAIL
-2026-10-02 05:45:18,DQ056,source_to_report,Source-to-report validation,powerbi,Power BI [roi] == source (±0.5%),critical,False,1365.428105,1.940457,0,relative diff 70266.31%,,FAIL
-2026-10-02 05:45:18,DQ057,source_to_report,Source-to-report validation,powerbi,Power BI [roas] == source (±0.5%),critical,False,1366.428105,2.940457,0,relative diff 46369.92%,,FAIL
-2026-10-02 05:45:18,DQ058,source_to_report,Source-to-report validation,powerbi,Power BI [total_impressions] == source (±0.5%),critical,False,16666500000.0,9176717247.0,0,relative diff 81.62%,,FAIL
-2026-10-02 05:45:18,DQ059,source_to_report,Source-to-report validation,powerbi,Power BI [total_clicks] == source (±0.5%),critical,True,780386787.0,780386787.0,0,relative diff 0.00%,,PASS
-2026-10-02 05:45:18,DQ060,source_to_report,Source-to-report validation,powerbi,Power BI [total_conversions] == source (±0.5%),critical,True,171513099.0,171513099.0,0,relative diff 0.00%,,PASS
-2026-10-02 05:45:18,DQ061,source_to_report,Source-to-report validation,powerbi,Power BI [ctr] == source (±0.5%),critical,True,0.08504,0.08504,0,relative diff 0.00%,,PASS
-2026-10-02 05:45:18,DQ062,source_to_report,Source-to-report validation,powerbi,Power BI [avg_ctr] == source (±0.5%),critical,False,0.14944,0.08504,0,relative diff 75.73%,,FAIL
-2026-10-02 05:45:18,DQ063,source_to_report,Source-to-report validation,powerbi,Power BI [conversion_rate] == source (±0.5%),critical,True,0.21978,0.21978,0,relative diff 0.00%,,PASS
-2026-10-02 05:45:18,DQ064,source_to_report,Source-to-report validation,powerbi,Power BI [cpa] == source (±0.5%),critical,False,0.365464,169.830806,0,relative diff 99.78%,,FAIL
-2026-10-02 05:45:18,DQ065,source_to_report,Source-to-report validation,powerbi,Power BI [net_profit] == source (±0.5%),critical,False,85650283118.19986,56522038284.87,0,relative diff 51.53%,,FAIL
+2026-10-03 05:58:55,DQ001,duplicate_records,Duplicate records,raw_campaigns,['campaign_id'] is unique,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ002,duplicate_records,Duplicate records,raw_campaigns,no full-row duplicates (ignoring ['campaign_id']),high,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ003,duplicate_records,Duplicate records,campaign_data,['campaign_id'] is unique,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ004,null_check,Null checks,campaign_data,campaign_id null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ005,null_check,Null checks,campaign_data,campaign_type null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ006,null_check,Null checks,campaign_data,channel_used null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ007,null_check,Null checks,campaign_data,impressions null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ008,null_check,Null checks,campaign_data,clicks null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ009,null_check,Null checks,campaign_data,leads null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ010,null_check,Null checks,campaign_data,conversions null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ011,null_check,Null checks,campaign_data,revenue null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ012,null_check,Null checks,campaign_data,acquisition_cost null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ013,null_check,Null checks,campaign_data,customer_segment null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ014,null_check,Null checks,campaign_data,date null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ015,null_check,Null checks,campaign_data,platform null% <= 0.00%,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ016,accepted_values,Null checks,campaign_data,"campaign_type in ['Email', 'Influencer', 'Paid Ads', 'SEO', 'Social Media']",high,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ017,referential_integrity,Referential integrity,churn_predictions,churn_predictions.campaign_id -> campaign_data.campaign_id,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ018,referential_integrity,Referential integrity,campaign_data,campaign_data.customer_segment -> rfm_segments.Customer_Segment,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ019,referential_integrity,Referential integrity,campaign_data,campaign_data.customer_segment -> clv_segments.customer_segment,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ020,date_validity,Date validity,raw_campaigns,date parses as %d-%m-%Y,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ021,date_validity,Date validity,raw_campaigns,"date within [2024-01-01, today]",critical,True,0.0,0.0,0,observed range 2024-07-01 00:00:00 .. 2025-06-24 00:00:00,,PASS
+2026-10-03 05:58:55,DQ022,date_validity,Date validity,campaign_data,date parses as ISO,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ023,date_validity,Date validity,campaign_data,"date within [2024-01-01, today]",critical,True,0.0,0.0,0,observed range 2024-07-01 00:00:00 .. 2025-06-24 00:00:00,,PASS
+2026-10-03 05:58:55,DQ024,negative_values,Negative values,campaign_data,impressions >= 0,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ025,negative_values,Negative values,campaign_data,clicks >= 0,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ026,negative_values,Negative values,campaign_data,leads >= 0,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ027,negative_values,Negative values,campaign_data,conversions >= 0,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ028,negative_values,Negative values,campaign_data,revenue >= 0,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ029,negative_values,Negative values,campaign_data,acquisition_cost >= 0,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ030,negative_values,Negative values,campaign_data,duration >= 0,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ031,business_rule,Negative values,campaign_data,funnel_clicks: clicks <= impressions,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ032,business_rule,Negative values,campaign_data,funnel_leads: leads <= clicks,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ033,business_rule,Negative values,campaign_data,funnel_conversions: conversions <= leads,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ034,business_rule,Negative values,campaign_data,aov_band: revenue / conversions >= 50 and revenue / conversions <= 5000,warning,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ035,business_rule,Negative values,campaign_data,engagement_range: engagement_score >= 0 and engagement_score <= 100,warning,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ036,duplicate_joins,Duplicate joins,rfm_segments,'one' side key rfm_segments.Customer_Segment is unique,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ037,duplicate_joins,Duplicate joins,clv_segments,'one' side key clv_segments.customer_segment is unique,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ038,duplicate_joins,Duplicate joins,churn_predictions,'one' side key churn_predictions.campaign_id is unique,critical,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ039,cardinality,Duplicate joins,campaign_data,channel_used distinct <= 10,warning,False,156.0,10.0,0,multi-valued attribute? split into a bridge table,,WARN
+2026-10-03 05:58:55,DQ040,row_multiplication,Unexpected row multiplication,campaign_data,row count campaign_data == raw_campaigns (±0.0%),critical,True,166665.0,166665.0,0,,,PASS
+2026-10-03 05:58:55,DQ041,row_multiplication,Unexpected row multiplication,churn_predictions,row count churn_predictions == campaign_data (±0.0%),critical,True,166665.0,166665.0,0,,,PASS
+2026-10-03 05:58:55,DQ042,row_multiplication,Unexpected row multiplication,campaign_data,left join campaign_data->rfm_segments on customer_segment keeps rows (ratio <= 1.0),critical,True,1.0,1.0,0,"166,665 rows before, 166,665 after",,PASS
+2026-10-03 05:58:55,DQ043,row_multiplication,Unexpected row multiplication,campaign_data,left join campaign_data->churn_predictions on campaign_id keeps rows (ratio <= 1.0),critical,True,1.0,1.0,0,"166,665 rows before, 166,665 after",,PASS
+2026-10-03 05:58:55,DQ044,kpi_reconciliation,KPI reconciliation,campaign_rows: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,166665.0,166665.0,0,relative diff 0.0000%,,PASS
+2026-10-03 05:58:55,DQ045,kpi_reconciliation,KPI reconciliation,total_revenue: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,85650246071.0,85650246071.0,0,relative diff 0.0000%,,PASS
+2026-10-03 05:58:55,DQ046,kpi_reconciliation,KPI reconciliation,total_spend: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,29128207786.129997,29128207786.129997,0,relative diff 0.0000%,,PASS
+2026-10-03 05:58:55,DQ047,kpi_reconciliation,KPI reconciliation,total_conversions: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,171513099.0,171513099.0,0,relative diff 0.0000%,,PASS
+2026-10-03 05:58:55,DQ048,kpi_reconciliation,KPI reconciliation,total_clicks: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,780386787.0,780386787.0,0,relative diff 0.0000%,,PASS
+2026-10-03 05:58:55,DQ049,kpi_reconciliation,KPI reconciliation,total_impressions: raw_campaigns vs campaign_data,raw_campaigns == campaign_data (±0.00%),critical,True,9176717247.0,9176717247.0,0,relative diff 0.0000%,,PASS
+2026-10-03 05:58:55,DQ050,kpi_reconciliation,KPI reconciliation,raw_campaigns,roi == (revenue - cost*conversions)/(cost*conversions),high,True,0.0,0.0,0,,,PASS
+2026-10-03 05:58:55,DQ051,label_balance,KPI reconciliation,churn_predictions,churn minority class >= 5%,high,True,0.247562,0.05,0,"class shares {0: 0.75244, 1: 0.24756}",,PASS
+2026-10-03 05:58:55,DQ052,column_consistency,Source-to-report validation,campaign_data,target_audience == customer_segment (mismatch <= 5%),warning,False,0.8007,0.05,133452,,,WARN
+2026-10-03 05:58:55,DQ053,source_to_report,Source-to-report validation,powerbi,Power BI [campaign_rows] == source (±0.5%),critical,True,166665.0,166665.0,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ054,source_to_report,Source-to-report validation,powerbi,Power BI [total_revenue] == source (±0.5%),critical,True,85650246071.0,85650246071.0,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ055,source_to_report,Source-to-report validation,powerbi,Power BI [total_spend] == source (±0.5%),critical,True,29128207786.12993,29128207786.129997,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ056,source_to_report,Source-to-report validation,powerbi,Power BI [roi] == source (±0.5%),critical,True,1.940457,1.940457,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ057,source_to_report,Source-to-report validation,powerbi,Power BI [roas] == source (±0.5%),critical,True,2.940457,2.940457,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ058,source_to_report,Source-to-report validation,powerbi,Power BI [total_impressions] == source (±0.5%),critical,True,9176717247.0,9176717247.0,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ059,source_to_report,Source-to-report validation,powerbi,Power BI [total_clicks] == source (±0.5%),critical,True,780386787.0,780386787.0,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ060,source_to_report,Source-to-report validation,powerbi,Power BI [total_conversions] == source (±0.5%),critical,True,171513099.0,171513099.0,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ061,source_to_report,Source-to-report validation,powerbi,Power BI [ctr] == source (±0.5%),critical,True,0.08504,0.08504,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ062,source_to_report,Source-to-report validation,powerbi,Power BI [avg_ctr] == source (±0.5%),critical,True,0.085023,0.08504,0,relative diff 0.02%,,PASS
+2026-10-03 05:58:55,DQ063,source_to_report,Source-to-report validation,powerbi,Power BI [conversion_rate] == source (±0.5%),critical,True,0.21978,0.21978,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ064,source_to_report,Source-to-report validation,powerbi,Power BI [cpa] == source (±0.5%),critical,True,169.830806,169.830806,0,relative diff 0.00%,,PASS
+2026-10-03 05:58:55,DQ065,source_to_report,Source-to-report validation,powerbi,Power BI [net_profit] == source (±0.5%),critical,True,56522038284.87007,56522038284.87,0,relative diff 0.00%,,PASS

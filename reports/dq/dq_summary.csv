@@ -1,10 +1,10 @@
 category,PASS,WARN,FAIL
 Duplicate records,3,0,0
-Null checks,12,0,1
+Null checks,13,0,0
 Referential integrity,3,0,0
 Date validity,4,0,0
 Negative values,12,0,0
 Duplicate joins,3,1,0
 Unexpected row multiplication,4,0,0
-KPI reconciliation,7,0,1
-Source-to-report validation,6,1,7
+KPI reconciliation,8,0,0
+Source-to-report validation,13,1,0

@@ -1,0 +1,22 @@
+table 'CPA Reduction %'
+	lineageTag: 57e5f921-98cf-40be-8261-66f61e39e73e
+
+	column 'CPA Reduction %'
+		formatString: 0%
+		lineageTag: b9780fcc-4054-4d19-8673-da26a8c2bc59
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition 'CPA Reduction %' = calculated
+		mode: import
+		source = GENERATESERIES ( 0, 0.3, 0.05 )
+
+	annotation PBI_Id = 0c2e0ef2572a43c496b0a80d16645fd8
+

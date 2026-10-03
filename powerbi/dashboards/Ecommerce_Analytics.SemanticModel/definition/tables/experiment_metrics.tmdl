@@ -1,0 +1,132 @@
+/// Per-metric readout per experiment (primary / secondary / guardrail).
+table experiment_metrics
+	lineageTag: d94c33ec-ca74-4334-9bc9-51e7013971f2
+
+	column metric
+		dataType: string
+		lineageTag: dc4c2946-349d-4b1e-8ac3-69e8f902f190
+		sourceColumn: metric
+
+	column metric_type
+		dataType: string
+		isHidden
+		lineageTag: cf0c4c6d-d0b6-41ad-a606-d7df45167c58
+		sourceColumn: metric_type
+
+	column control
+		dataType: double
+		formatString: #,0.0000
+		lineageTag: 24c696e6-451f-40d0-9699-42d4a4daaf7d
+		summarizeBy: none
+		sourceColumn: control
+
+	column treatment
+		dataType: double
+		formatString: #,0.0000
+		lineageTag: f3bcd404-07de-4c87-96ac-7b3a2deb2c0f
+		summarizeBy: none
+		sourceColumn: treatment
+
+	column abs_diff
+		dataType: double
+		isHidden
+		lineageTag: 03df5cb0-526e-4801-83e9-975c524eb7c1
+		summarizeBy: none
+		sourceColumn: abs_diff
+
+	column rel_lift
+		dataType: double
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: d1de04de-e8a9-4f35-885e-21487b9f8ed0
+		summarizeBy: none
+		sourceColumn: rel_lift
+
+	column ci_low
+		dataType: double
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 101c97ea-a307-442f-8ce5-31b4c48f183b
+		summarizeBy: none
+		sourceColumn: ci_low
+
+	column ci_high
+		dataType: double
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 609c6466-8b4b-429c-b3cf-02a6561795b7
+		summarizeBy: none
+		sourceColumn: ci_high
+
+	column p_value
+		dataType: double
+		formatString: 0.0000
+		lineageTag: a20d8d40-24be-41a4-9b4e-48b3d89171b3
+		summarizeBy: none
+		sourceColumn: p_value
+
+	column n_control
+		dataType: int64
+		isHidden
+		lineageTag: b49375ca-239a-4904-8541-267b2aac3f26
+		summarizeBy: none
+		sourceColumn: n_control
+
+	column n_treatment
+		dataType: int64
+		isHidden
+		lineageTag: 826de368-aee2-47da-a1b8-06dafd875b47
+		summarizeBy: none
+		sourceColumn: n_treatment
+
+	column prob_treatment_better
+		dataType: double
+		formatString: 0.0%
+		lineageTag: eec5de04-fce7-4d9f-bed2-21f6ae0a1e66
+		summarizeBy: none
+		sourceColumn: prob_treatment_better
+
+	column expected_loss
+		dataType: double
+		isHidden
+		lineageTag: 2183a1e4-6d62-4281-8fc8-d787da68725e
+		summarizeBy: none
+		sourceColumn: expected_loss
+
+	column role
+		dataType: string
+		lineageTag: ac3b4b92-113f-40d4-a8b0-4a6e1f97534a
+		sourceColumn: role
+
+	column status
+		dataType: string
+		lineageTag: 2963fe9b-cc41-4961-be69-cd8c467fca98
+		sourceColumn: status
+
+	column cuped_variance_reduction
+		dataType: double
+		isHidden
+		lineageTag: 3fbdd8ec-6e9f-4154-adbf-b94a1e2ace91
+		summarizeBy: none
+		sourceColumn: cuped_variance_reduction
+
+	column experiment_id
+		dataType: string
+		lineageTag: 4688f648-b475-44a8-9bec-6f43a0d8d3dc
+		sourceColumn: experiment_id
+
+	column metric_key
+		dataType: string
+		isHidden
+		lineageTag: 827187b5-350d-471c-b6ef-0eb8ac2b909e
+		sourceColumn: metric_key
+
+	partition experiment_metrics = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(ProjectRoot & "reports\experiments\experiment_metrics.csv"),[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"metric", type text}, {"metric_type", type text}, {"control", type number}, {"treatment", type number}, {"abs_diff", type number}, {"rel_lift", type number}, {"ci_low", type number}, {"ci_high", type number}, {"p_value", type number}, {"n_control", Int64.Type}, {"n_treatment", Int64.Type}, {"prob_treatment_better", type number}, {"expected_loss", type number}, {"role", type text}, {"status", type text}, {"cuped_variance_reduction", type number}, {"experiment_id", type text}}, "en-US"),
+				    #"Replaced Status" = Table.ReplaceValue(#"Changed Type", null, "-", Replacer.ReplaceValue, {"status"}),
+				    #"Added Key" = Table.AddColumn(#"Replaced Status", "metric_key", each [experiment_id] & " | " & [role] & " | " & [metric], type text)
+				in
+				    #"Added Key"
+

@@ -1,0 +1,12 @@
+/// Sees only Nykaa campaigns, churn rows and experiments.
+role 'Brand - Nykaa'
+	modelPermission: read
+
+	tablePermission campaign_data = campaign_data[platform] = "Nykaa"
+
+	tablePermission churn_predictions = LEFT ( churn_predictions[campaign_id], 2 ) = "NY"
+
+	tablePermission experiment_decisions = experiment_decisions[platform] = "Nykaa"
+
+	annotation PBI_Id = 0cb465e281cf47839f035e3eff4254f4
+

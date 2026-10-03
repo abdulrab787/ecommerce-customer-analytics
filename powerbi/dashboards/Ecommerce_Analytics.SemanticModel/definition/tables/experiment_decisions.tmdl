@@ -1,0 +1,169 @@
+/// Output of src/experimentation/decide.py - one row per pre-registered experiment (SIMULATED data).
+table experiment_decisions
+	lineageTag: 476a2143-6a5b-40a5-abac-c23588919352
+
+	column experiment_id
+		dataType: string
+		isKey
+		lineageTag: d0282318-8920-48ad-9701-ee5b443cae6b
+		sourceColumn: experiment_id
+
+	column name
+		dataType: string
+		lineageTag: 4531c497-77a0-4c62-b675-db8fdef0ba93
+		sourceColumn: name
+
+	column platform
+		dataType: string
+		lineageTag: f50df2af-bb41-4bf6-af5f-ed917fea354f
+		sourceColumn: platform
+
+	column owner
+		dataType: string
+		lineageTag: faa97755-f0e1-4fb5-b5de-2c0649205998
+		sourceColumn: owner
+
+	column start
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 390f7322-2201-4630-af8b-276a2d446a18
+		sourceColumn: start
+
+	column end
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 1a9708bb-1444-461e-aa92-b7786071018f
+		sourceColumn: end
+
+	column primary_metric
+		dataType: string
+		lineageTag: c046bc4a-4f6f-4012-8fee-8cc92595ebd0
+		sourceColumn: primary_metric
+
+	column planned_n_per_arm
+		dataType: int64
+		formatString: #,0
+		lineageTag: c4f9933e-cf9f-43ab-b0df-fa51a82bfc1a
+		summarizeBy: none
+		sourceColumn: planned_n_per_arm
+
+	column planned_days
+		dataType: int64
+		lineageTag: 0a26e37c-20c2-4bc4-b9b6-9907cae4e755
+		summarizeBy: none
+		sourceColumn: planned_days
+
+	column actual_n_control
+		dataType: int64
+		formatString: #,0
+		lineageTag: 90eb9000-8574-4bdf-97a2-3be31d99ad4d
+		summarizeBy: none
+		sourceColumn: actual_n_control
+
+	column actual_n_treatment
+		dataType: int64
+		formatString: #,0
+		lineageTag: ad35be4c-8d79-4d16-88df-6a329bb2d404
+		summarizeBy: none
+		sourceColumn: actual_n_treatment
+
+	column srm_p_value
+		dataType: double
+		formatString: 0.0E+00
+		lineageTag: e1f2a8ab-34d0-43dd-b027-aa359993a2c6
+		summarizeBy: none
+		sourceColumn: srm_p_value
+
+	column srm_detected
+		dataType: string
+		lineageTag: 813135b1-d6cf-477f-b52f-9c63f1e9126b
+		sourceColumn: srm_detected
+
+	column primary_lift
+		dataType: double
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 399b43b0-e8c7-47a9-a7e1-91fd4dd01e6a
+		summarizeBy: none
+		sourceColumn: primary_lift
+
+	column primary_ci_low
+		dataType: double
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: f846516b-8d58-48ba-a551-59060c131dd0
+		summarizeBy: none
+		sourceColumn: primary_ci_low
+
+	column primary_ci_high
+		dataType: double
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: f84a18b8-0bba-4792-afd2-507b026944a4
+		summarizeBy: none
+		sourceColumn: primary_ci_high
+
+	column primary_p_value
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 1eb3c2a3-fffc-4896-bcd5-85df7f89871e
+		summarizeBy: none
+		sourceColumn: primary_p_value
+
+	column prob_treatment_better
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 1de75c8b-5537-489d-8a9d-affd3c6b7e57
+		summarizeBy: none
+		sourceColumn: prob_treatment_better
+
+	column expected_loss
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 656095cb-086c-44ff-8f62-9879dd98365b
+		summarizeBy: none
+		sourceColumn: expected_loss
+
+	column guardrails
+		dataType: string
+		lineageTag: ab24f08c-e750-4e33-9c24-17faa01cf58a
+		sourceColumn: guardrails
+
+	column annual_revenue_impact
+		dataType: double
+		formatString: #,0
+		lineageTag: 93e4f4ff-f312-4c84-911a-20b896384e2b
+		summarizeBy: none
+		sourceColumn: annual_revenue_impact
+
+	column annual_margin_impact
+		dataType: double
+		formatString: #,0
+		lineageTag: b91458d6-96c2-45fb-835c-3a8565cbe8c7
+		summarizeBy: none
+		sourceColumn: annual_margin_impact
+
+	column decision
+		dataType: string
+		lineageTag: 1fd09635-9657-4394-924e-616aca101663
+		sourceColumn: decision
+
+	column reason
+		dataType: string
+		lineageTag: 6da1e973-bf1f-4e6a-a062-128fe6e04e92
+		sourceColumn: reason
+
+	column is_simulated
+		dataType: int64
+		isHidden
+		lineageTag: d9573ef1-de51-44d2-8044-f7fe1982a522
+		summarizeBy: none
+		sourceColumn: is_simulated
+
+	partition experiment_decisions = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(ProjectRoot & "reports\experiments\experiment_decisions.csv"),[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"experiment_id", type text}, {"name", type text}, {"platform", type text}, {"owner", type text}, {"start", type date}, {"end", type date}, {"primary_metric", type text}, {"planned_n_per_arm", Int64.Type}, {"planned_days", Int64.Type}, {"actual_n_control", Int64.Type}, {"actual_n_treatment", Int64.Type}, {"srm_p_value", type number}, {"srm_detected", type text}, {"primary_lift", type number}, {"primary_ci_low", type number}, {"primary_ci_high", type number}, {"primary_p_value", type number}, {"prob_treatment_better", type number}, {"expected_loss", type number}, {"guardrails", type text}, {"annual_revenue_impact", type number}, {"annual_margin_impact", type number}, {"decision", type text}, {"reason", type text}, {"is_simulated", Int64.Type}}, "en-US")
+				in
+				    #"Changed Type"
+

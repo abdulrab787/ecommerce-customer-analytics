@@ -118,6 +118,34 @@ It includes:
 
 ---
 
+# 🎬 **Dashboard Tour (v2)**
+
+<p align="center"><img src="powerbi/assets/v2/dashboard_tour.gif" width="900" alt="Dashboard tour"/></p>
+
+▶️ Full-quality video: [`powerbi/assets/v2/dashboard_tour.mp4`](powerbi/assets/v2/dashboard_tour.mp4) (53 s)
+
+**What's new in v2**
+- **Corrected KPIs:** ROI 194% (the old dashboard showed 136,543%), spend Rs.29.1B, impressions 9.18B; every KPI reconciles to the raw source.
+- **🧠 AI Insight · 🔬 Hypothesis · ✅ Decision** panels on every page, written by DAX and recalculated on each slicer change.
+- **Left navigation panel** with page buttons, a **↺ Reset all filters** button and stacked slicers.
+- **🎛️ What-If Simulator:** CPA-reduction and budget-shift sliders recalculate contribution and ROI live.
+- **🛡️ Data Quality page:** 65 checks across 9 layers, shown as **DATA CERTIFIED** or **NOT CERTIFIED**.
+- **🧪 Experiment Decisions:** pre-registered A/B decision rule (SRM → guardrails → significance → MDE).
+- **Campaign Risk model** replaces the leaky churn label; the honest time-split AUC is 0.50.
+- **Drill-through** to a Campaign Detail page, a **KPI hover tooltip**, **RLS roles** (3 brands + All Brands) and a **Time Intelligence** calculation group.
+
+| Executive Overview | What-If Simulator |
+|---|---|
+| ![](powerbi/assets/v2/01_executive.jpg) | ![](powerbi/assets/v2/06b_whatif_scenario.jpg) |
+| **Data Quality & Trust Layer** | **Experiment Decisions** |
+| ![](powerbi/assets/v2/07_data_quality.jpg) | ![](powerbi/assets/v2/08_experiments.jpg) |
+| **Campaign Risk (under-performance model)** | **Campaign Detail (drill-through)** |
+| ![](powerbi/assets/v2/04_campaign_risk.jpg) | ![](powerbi/assets/v2/09_drillthrough.jpg) |
+
+Open `powerbi/dashboards/Ecommerce_Analytics.pbip` in Power BI Desktop. Data paths are set by the `ProjectRoot` parameter, and the full model documentation is in `Ecommerce_Analytics.SemanticModel/documentation/model-documentation.md`.
+
+---
+
 # 🛡️ **Data Quality Framework**
 
 A reusable, config-driven QA layer (`src/data_quality/`, rules in `config/dq_rules.yml`), 65 checks across 9 layers:
@@ -328,4 +356,4 @@ sql/
 
 **Abdurrab**  
 Data Analyst | BI Developer | Power BI Specialist  
-Abu Dhabi, UAE  
+Dubai, UAE  

@@ -1,0 +1,12 @@
+/// Sees only Purplle campaigns, churn rows and experiments.
+role 'Brand - Purplle'
+	modelPermission: read
+
+	tablePermission campaign_data = campaign_data[platform] = "Purplle"
+
+	tablePermission churn_predictions = LEFT ( churn_predictions[campaign_id], 2 ) = "PU"
+
+	tablePermission experiment_decisions = experiment_decisions[platform] = "Purplle"
+
+	annotation PBI_Id = 2087fc45d20a4c5482bf17f248d5afd3
+

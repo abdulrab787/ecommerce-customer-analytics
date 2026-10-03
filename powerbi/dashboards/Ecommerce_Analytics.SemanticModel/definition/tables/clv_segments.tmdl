@@ -1,0 +1,140 @@
+table clv_segments
+	lineageTag: bcccfee5-70d6-47b2-95a0-221f9959d2ce
+
+	column customer_segment
+		dataType: string
+		lineageTag: 1b9e7e59-2e64-4105-8198-c6b315d8c205
+		summarizeBy: none
+		sourceColumn: customer_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_conversions
+		dataType: int64
+		formatString: 0
+		lineageTag: 2df7267d-b9c4-408d-adab-c3c5e0e39e10
+		summarizeBy: none
+		sourceColumn: total_conversions
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_leads
+		dataType: int64
+		formatString: 0
+		lineageTag: d6c7f3dc-c8cd-4251-ab00-8e9cfd4296c0
+		summarizeBy: none
+		sourceColumn: total_leads
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_clicks
+		dataType: int64
+		formatString: 0
+		lineageTag: 34fcbcc0-8f3f-431a-8c75-8c455817f684
+		summarizeBy: none
+		sourceColumn: total_clicks
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_impressions
+		dataType: int64
+		formatString: 0
+		lineageTag: 03cf996b-865d-46bf-a5b8-80fb829ccfb8
+		summarizeBy: none
+		sourceColumn: total_impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_engagement
+		dataType: double
+		lineageTag: 132f0025-cd70-4c84-92ff-c4684ab7bbda
+		summarizeBy: none
+		sourceColumn: avg_engagement
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column frequency
+		dataType: int64
+		formatString: 0
+		lineageTag: f61ccf6b-bbf7-4fd6-a04c-ba502ec8dd2f
+		summarizeBy: none
+		sourceColumn: frequency
+
+		annotation SummarizationSetBy = Automatic
+
+	column CLV_simple
+		dataType: int64
+		formatString: 0
+		lineageTag: 0163c3c4-ccc0-4aca-8a03-803323499877
+		summarizeBy: none
+		sourceColumn: CLV_simple
+
+		annotation SummarizationSetBy = Automatic
+
+	column AOV
+		dataType: double
+		lineageTag: 041433ad-415e-4848-a71c-b24488f6e9ca
+		summarizeBy: none
+		sourceColumn: AOV
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CLV_aov
+		dataType: double
+		lineageTag: aaf6bdcc-73a9-44bc-8c65-b07cac712eb9
+		summarizeBy: none
+		sourceColumn: CLV_aov
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RRetention_Rate
+		dataType: double
+		lineageTag: dc33c06e-ddd3-4c66-912c-2b606514909a
+		summarizeBy: none
+		sourceColumn: RRetention_Rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Retention_Rate
+		dataType: double
+		lineageTag: f4eb7cae-4be2-42f5-9dbf-801358fca6fd
+		summarizeBy: none
+		sourceColumn: Retention_Rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CLV_discounted
+		dataType: double
+		lineageTag: a76c172e-13f6-4f96-8dc7-2fd6305127cd
+		summarizeBy: none
+		sourceColumn: CLV_discounted
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition clv_segments = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(ProjectRoot & "data\processed\clv_segments.csv"),[Delimiter=",", Columns=14, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"customer_segment", type text}, {"total_revenue", Int64.Type}, {"total_conversions", Int64.Type}, {"total_leads", Int64.Type}, {"total_clicks", Int64.Type}, {"total_impressions", Int64.Type}, {"avg_engagement", type number}, {"frequency", Int64.Type}, {"CLV_simple", Int64.Type}, {"AOV", type number}, {"CLV_aov", type number}, {"RRetention_Rate", type number}, {"Retention_Rate", type number}, {"CLV_discounted", type number}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"total_revenue"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
