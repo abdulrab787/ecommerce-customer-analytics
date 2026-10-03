@@ -1,0 +1,34 @@
+table Waterfall_Steps
+	lineageTag: d0884dba-9b3e-4f8e-8779-78264b8b8a46
+
+	column Step
+		lineageTag: 8910ff1f-1d95-467e-bb34-a46fd8a17874
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step]
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: 139c9d73-645b-4658-b60e-706c7d43e88f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Waterfall_Steps = calculated
+		mode: import
+		source =
+				DATATABLE (
+				    "Step", STRING,
+				    "SortOrder", INTEGER,
+				    {
+				        { "Total Revenue", 1 },
+				        { "Media Spend", 2 }
+				    }
+				)
+
+	annotation PBI_Id = 7cd42b91f38a4fa2ba88da7333935605
+

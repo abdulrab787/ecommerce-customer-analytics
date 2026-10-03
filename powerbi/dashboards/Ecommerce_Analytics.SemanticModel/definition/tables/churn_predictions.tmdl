@@ -1,0 +1,228 @@
+table churn_predictions
+	lineageTag: 8e47d88e-5a01-423f-87dd-e4367d4465f4
+
+	column campaign_id
+		dataType: string
+		lineageTag: 6868b243-c568-4f1a-a346-89d182ad35a4
+		summarizeBy: none
+		sourceColumn: campaign_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column campaign_type
+		dataType: string
+		lineageTag: 45706d42-0c69-470b-b485-3c29713de3d7
+		summarizeBy: none
+		sourceColumn: campaign_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_audience
+		dataType: string
+		lineageTag: 6285babf-b434-4a82-9847-1f11fb575f09
+		summarizeBy: none
+		sourceColumn: target_audience
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration
+		dataType: int64
+		formatString: 0
+		lineageTag: 02b16479-cd06-48a3-b49d-90cf586bbf4d
+		summarizeBy: sum
+		sourceColumn: duration
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_used
+		dataType: string
+		lineageTag: eb34be44-adf5-4021-8956-1a411bee904f
+		summarizeBy: none
+		sourceColumn: channel_used
+
+		annotation SummarizationSetBy = Automatic
+
+	column impressions
+		dataType: int64
+		formatString: 0
+		lineageTag: 5140e6a0-eed4-4d3d-be9c-4e64768d334b
+		summarizeBy: sum
+		sourceColumn: impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column clicks
+		dataType: int64
+		formatString: 0
+		lineageTag: 696f6f48-9657-4c2d-9c34-7d1fd4f65a96
+		summarizeBy: sum
+		sourceColumn: clicks
+
+		annotation SummarizationSetBy = Automatic
+
+	column leads
+		dataType: int64
+		formatString: 0
+		lineageTag: c2df8ead-2eb9-42b7-bafd-5cd27335505a
+		summarizeBy: sum
+		sourceColumn: leads
+
+		annotation SummarizationSetBy = Automatic
+
+	column conversions
+		dataType: int64
+		formatString: 0
+		lineageTag: 0259a37d-c858-4ee1-8db6-c4ddb0358924
+		summarizeBy: sum
+		sourceColumn: conversions
+
+		annotation SummarizationSetBy = Automatic
+
+	column revenue
+		dataType: int64
+		formatString: 0
+		lineageTag: 7182eb97-c847-4cb8-8081-ac42421d4123
+		summarizeBy: sum
+		sourceColumn: revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column acquisition_cost
+		dataType: double
+		lineageTag: ea5e9313-09ca-40bc-a75a-5f39e7c6dab6
+		summarizeBy: sum
+		sourceColumn: acquisition_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column roi
+		dataType: double
+		lineageTag: f2ce9f50-3cda-49d5-ae78-71b156de24d0
+		summarizeBy: sum
+		sourceColumn: roi
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column language
+		dataType: string
+		lineageTag: d4b3d817-341a-4454-a8cf-20ba3b318a6d
+		summarizeBy: none
+		sourceColumn: language
+
+		annotation SummarizationSetBy = Automatic
+
+	column engagement_score
+		dataType: double
+		lineageTag: 8cc87869-ed4b-4520-b1ee-562bfec910eb
+		summarizeBy: sum
+		sourceColumn: engagement_score
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column customer_segment
+		dataType: string
+		lineageTag: 1ef1e606-1094-4ffa-ac48-65ef384cc2f6
+		summarizeBy: none
+		sourceColumn: customer_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 42eab052-3967-42b0-b6c8-b2106fd1e154
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CTR
+		dataType: double
+		lineageTag: 90f8f016-518b-4ea2-b9d8-13836cd40601
+		summarizeBy: sum
+		sourceColumn: CTR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Conversion_Rate
+		dataType: double
+		lineageTag: 07e13ed9-15f0-4b68-be7d-9bbb9310e2dc
+		summarizeBy: sum
+		sourceColumn: Conversion_Rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CPL
+		dataType: double
+		lineageTag: e62ee874-31d1-4ced-b895-0c39b84ac4d0
+		summarizeBy: sum
+		sourceColumn: CPL
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CPCV
+		dataType: double
+		lineageTag: 43039206-a0d9-43a5-b466-1d0eec95664c
+		summarizeBy: sum
+		sourceColumn: CPCV
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column frequency
+		dataType: int64
+		formatString: 0
+		lineageTag: d48267d0-5e48-4603-a8ca-5ffd75fa8d7d
+		summarizeBy: sum
+		sourceColumn: frequency
+
+		annotation SummarizationSetBy = Automatic
+
+	column churn
+		dataType: int64
+		formatString: 0
+		lineageTag: 4d5baea6-27ee-437d-81e7-0299d96e97f9
+		summarizeBy: sum
+		sourceColumn: churn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Churn_Prediction
+		dataType: int64
+		formatString: 0
+		lineageTag: 32c586c3-e439-49d2-aa10-bc68d7e5fd48
+		summarizeBy: sum
+		sourceColumn: Churn_Prediction
+
+		annotation SummarizationSetBy = Automatic
+
+	partition churn_predictions = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(ProjectRoot & "data\processed\churn_predictions.csv"),[Delimiter=",", Columns=23, QuoteStyle=QuoteStyle.None]),
+				    #"Merged Queries" = Table.NestedJoin(Source, {"Column1"}, campaign_data, {"campaign_id"}, "campaign_data", JoinKind.LeftOuter),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Merged Queries", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"campaign_id", type text}, {"campaign_type", type text}, {"target_audience", type text}, {"duration", Int64.Type}, {"channel_used", type text}, {"impressions", Int64.Type}, {"clicks", Int64.Type}, {"leads", Int64.Type}, {"conversions", Int64.Type}, {"revenue", Int64.Type}, {"acquisition_cost", type number}, {"roi", type number}, {"language", type text}, {"engagement_score", type number}, {"customer_segment", type text}, {"date", type date}, {"CTR", type number}, {"Conversion_Rate", type number}, {"CPL", type number}, {"CPCV", type number}, {"frequency", Int64.Type}, {"churn", Int64.Type}, {"Churn_Prediction", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

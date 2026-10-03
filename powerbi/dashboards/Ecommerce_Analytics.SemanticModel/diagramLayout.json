@@ -1,0 +1,137 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 492.12122210328789,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 710.0157342657343,
+            "y": 0
+          },
+          "nodeIndex": "churn_predictions",
+          "nodeLineageTag": "8e47d88e-5a01-423f-87dd-e4367d4465f4",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 1110.4597902097903,
+            "y": 0
+          },
+          "nodeIndex": "clv_segments",
+          "nodeLineageTag": "bcccfee5-70d6-47b2-95a0-221f9959d2ce",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 682.92190513728917,
+            "y": 549.564722463834
+          },
+          "nodeIndex": "rfm_segments",
+          "nodeLineageTag": "e4ac1fd8-f949-4ed1-a726-d24f2f58903f",
+          "size": {
+            "height": 379.01886792452831,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 340.39510489510485,
+            "y": 0
+          },
+          "nodeIndex": "campaign_data",
+          "nodeLineageTag": "83f41d00-b2c0-4caf-9301-49834f73d480",
+          "size": {
+            "height": 813.20754716981128,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 41.354895104895149,
+            "y": 519.12937062937067
+          },
+          "nodeIndex": "Date",
+          "nodeLineageTag": "8890a380-eeea-4f26-8f63-1a629fb192db",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1354.8269560628057,
+            "y": 317.0186370233539
+          },
+          "nodeIndex": "Measure's",
+          "nodeLineageTag": "6beab3c4-a5af-4bb9-9947-bd0a6fb0c1b6",
+          "size": {
+            "height": 677.35849056603774,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1597.4720609579106,
+            "y": 397.18856379469582
+          },
+          "nodeIndex": "RFM_Segment_Table",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1840.1171658530154,
+            "y": 397.18856379469582
+          },
+          "nodeIndex": "Table",
+          "nodeLineageTag": "5672571f-df4a-4298-93c4-f2dfaa212b3e",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2082.7622707481205,
+            "y": 397.18856379469582
+          },
+          "nodeIndex": "Waterfall_Steps",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 51.206895513055009,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": true,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

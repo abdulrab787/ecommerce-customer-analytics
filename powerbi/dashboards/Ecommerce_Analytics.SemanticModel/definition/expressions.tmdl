@@ -1,0 +1,4 @@
+/// Root folder of the ecommerce-customer-analytics repo (ends with a backslash). Change this one value to move the project.
+expression ProjectRoot = "C:\KC\ecommerce-customer-analytics\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 167b92e3-df9a-4617-91b1-86f539110d6b
+

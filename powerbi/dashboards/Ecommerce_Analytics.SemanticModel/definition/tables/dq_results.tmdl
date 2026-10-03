@@ -1,0 +1,98 @@
+/// Output of src/data_quality/runner.py - one row per data-quality check.
+table dq_results
+	lineageTag: debb7fa7-55a2-4ca4-ae0f-1af755bba71c
+
+	column run_ts
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:nn
+		lineageTag: 03f17fda-0c4f-4e6c-9140-a394d61b78f7
+		sourceColumn: run_ts
+
+	column check_id
+		dataType: string
+		lineageTag: 4aa94e04-1a1f-4fb0-8e2f-9bf3045ff9b2
+		sourceColumn: check_id
+
+	column check
+		dataType: string
+		lineageTag: 5101ad78-1c0a-44c6-bfcb-d56029d47994
+		sourceColumn: check
+
+	column category
+		dataType: string
+		lineageTag: ee44f50f-5be8-4671-82b0-943aa69894f1
+		sourceColumn: category
+
+	column table
+		dataType: string
+		lineageTag: 4a702c54-0b4c-4714-88bf-06975a67b354
+		sourceColumn: table
+
+	column rule
+		dataType: string
+		lineageTag: 06567e5e-0750-41f0-b368-111af3216697
+		sourceColumn: rule
+
+	column severity
+		dataType: string
+		lineageTag: 319a3e3b-b34d-42b6-9f12-2235dc44baae
+		sourceColumn: severity
+		sortByColumn: severity_rank
+
+	column passed
+		dataType: string
+		isHidden
+		lineageTag: 56a305ac-c646-4786-9577-3fb6d9908a74
+		sourceColumn: passed
+
+	column observed
+		dataType: string
+		lineageTag: d0c9b6a8-8506-4ad0-8cd5-855a53c0b755
+		sourceColumn: observed
+
+	column expected
+		dataType: string
+		lineageTag: efe6663e-1f3b-4639-86a9-4f45bd6a0e30
+		sourceColumn: expected
+
+	column failing_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 514d64f8-f425-449e-8be0-1a6e659e29f8
+		summarizeBy: none
+		sourceColumn: failing_rows
+
+	column detail
+		dataType: string
+		lineageTag: 4676748d-bb69-4076-a1ee-a5db0ff9a3a4
+		sourceColumn: detail
+
+	column sample
+		dataType: string
+		isHidden
+		lineageTag: 53b23ecc-cf7e-4ff3-b99e-ac8d1e296b61
+		sourceColumn: sample
+
+	column status
+		dataType: string
+		lineageTag: e20c3ce8-93a4-4f72-8188-4c6d3be74be7
+		sourceColumn: status
+
+	column severity_rank
+		dataType: int64
+		isHidden
+		lineageTag: 8bc941aa-c567-4239-9ed5-da682861b90a
+		summarizeBy: none
+		sourceColumn: severity_rank
+
+	partition dq_results = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(ProjectRoot & "reports\dq\dq_results.csv"),[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"run_ts", type datetime}, {"check_id", type text}, {"check", type text}, {"category", type text}, {"table", type text}, {"rule", type text}, {"severity", type text}, {"passed", type text}, {"observed", type text}, {"expected", type text}, {"failing_rows", Int64.Type}, {"detail", type text}, {"sample", type text}, {"status", type text}}, "en-US"),
+				    #"Added Severity Rank" = Table.AddColumn(#"Changed Type", "severity_rank", each if [severity] = "critical" then 1 else if [severity] = "high" then 2 else 3, Int64.Type)
+				in
+				    #"Added Severity Rank"
+

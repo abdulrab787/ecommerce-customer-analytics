@@ -1,0 +1,85 @@
+# ---------------------------------------------------------------------------
+# Experiment pre-registration.
+# Everything here is fixed BEFORE launch: hypothesis, primary metric, MDE,
+# sample size, guardrails and the decision rule. The analysis code reads this
+# file, so the decision cannot be changed after seeing the data.
+#
+# NOTE: the experiment data in experiments/data/ is SIMULATED (src/experimentation/simulate.py)
+# for portfolio purposes — the source campaign files contain no randomised tests.
+# ---------------------------------------------------------------------------
+defaults:
+  alpha: 0.05
+  power: 0.80
+  srm_threshold: 0.001          # p-value below this => assignment is broken => INVALID
+  ship_prob_threshold: 0.95     # Bayesian P(treatment > control) needed to ship
+  max_expected_loss: 0.005      # max acceptable expected relative loss if we ship and are wrong
+  split: {control: 0.5, treatment: 0.5}
+
+experiments:
+  - id: EXP-001
+    name: Free-shipping progress bar on cart
+    platform: Nykaa
+    owner: Growth / Checkout
+    hypothesis: >
+      Showing "You're Rs.X away from free shipping" on the cart page will increase
+      checkout conversion because it reduces surprise shipping costs.
+    unit: user
+    start: 2025-03-03
+    end: 2025-03-30
+    primary_metric: {name: conversion_rate, type: proportion, baseline: 0.035, mde_rel: 0.08}
+    secondary_metrics:
+      - {name: revenue_per_user, type: mean}
+    guardrails:
+      - {name: gross_margin_per_user, type: mean, max_rel_drop: 0.02}
+      - {name: refund_rate,          type: proportion, max_rel_increase: 0.10}
+    daily_eligible_users: 6000
+
+  - id: EXP-002
+    name: Influencer code 20% off vs 10% off
+    platform: Purplle
+    owner: Influencer Marketing
+    hypothesis: >
+      Doubling the influencer discount from 10% to 20% will lift conversion enough
+      to grow gross margin per user.
+    unit: user
+    start: 2025-04-07
+    end: 2025-05-04
+    primary_metric: {name: conversion_rate, type: proportion, baseline: 0.035, mde_rel: 0.08}
+    secondary_metrics:
+      - {name: revenue_per_user, type: mean}
+    guardrails:
+      - {name: gross_margin_per_user, type: mean, max_rel_drop: 0.02}
+      - {name: refund_rate,          type: proportion, max_rel_increase: 0.10}
+    daily_eligible_users: 6000
+
+  - id: EXP-003
+    name: WhatsApp cart-abandonment reminder (2h vs 24h)
+    platform: Tira
+    owner: CRM
+    hypothesis: >
+      Sending the WhatsApp reminder after 2h instead of 24h will recover more carts.
+    unit: user
+    start: 2025-05-05
+    end: 2025-06-01
+    primary_metric: {name: conversion_rate, type: proportion, baseline: 0.035, mde_rel: 0.08}
+    secondary_metrics:
+      - {name: revenue_per_user, type: mean}
+    guardrails:
+      - {name: unsubscribe_rate, type: proportion, max_rel_increase: 0.10}
+    daily_eligible_users: 6000
+
+  - id: EXP-004
+    name: Email subject line with first name
+    platform: Nykaa
+    owner: CRM
+    hypothesis: >
+      Personalising the subject line with the customer's first name will lift conversion.
+    unit: user
+    start: 2025-06-02
+    end: 2025-06-29
+    primary_metric: {name: conversion_rate, type: proportion, baseline: 0.035, mde_rel: 0.08}
+    secondary_metrics:
+      - {name: revenue_per_user, type: mean}
+    guardrails:
+      - {name: unsubscribe_rate, type: proportion, max_rel_increase: 0.10}
+    daily_eligible_users: 6000

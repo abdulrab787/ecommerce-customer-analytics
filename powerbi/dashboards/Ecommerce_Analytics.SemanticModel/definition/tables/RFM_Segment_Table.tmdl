@@ -1,0 +1,40 @@
+table RFM_Segment_Table
+	lineageTag: d6a8b41e-63d6-46a3-84ea-ccd24fafc643
+
+	measure RFM_Segment_Filter = ```
+			
+			IF(
+			    SELECTEDVALUE(RFM_Segment_Table[RFM_Segment]) = [RFM_Segment],
+			    1,
+			    0
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 24b275a9-59e8-4c5f-a298-126d0ec27fc6
+
+	column RFM_Segment
+		lineageTag: 8c0996ac-3f43-4aa6-bb71-34f09de17f78
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [RFM_Segment]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition RFM_Segment_Table = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE(
+				    "RFM_Segment", STRING,
+				    {
+				        {"High Value"},
+				        {"Medium Value"},
+				        {"Low Value"}
+				    }
+				)
+				
+				```
+
+	annotation PBI_Id = 17ac6adaecbf4aa3b8bedf3c3af23f7a
+

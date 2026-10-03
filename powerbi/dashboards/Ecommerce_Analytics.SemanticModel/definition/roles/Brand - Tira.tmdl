@@ -1,0 +1,12 @@
+/// Sees only Tira campaigns, churn rows and experiments.
+role 'Brand - Tira'
+	modelPermission: read
+
+	tablePermission campaign_data = campaign_data[platform] = "Tira"
+
+	tablePermission churn_predictions = LEFT ( churn_predictions[campaign_id], 2 ) = "TI"
+
+	tablePermission experiment_decisions = experiment_decisions[platform] = "Tira"
+
+	annotation PBI_Id = 593283b6d4a642b58dc95724efa7e04c
+

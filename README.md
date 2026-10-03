@@ -118,6 +118,84 @@ It includes:
 
 ---
 
+# 🎬 **Dashboard Tour (v2)**
+
+<p align="center"><img src="powerbi/assets/v2/dashboard_tour.gif" width="900" alt="Dashboard tour"/></p>
+
+▶️ Full-quality video: [`powerbi/assets/v2/dashboard_tour.mp4`](powerbi/assets/v2/dashboard_tour.mp4) (53 s)
+
+**What's new in v2**
+- **Corrected KPIs:** ROI 194% (the old dashboard showed 136,543%), spend Rs.29.1B, impressions 9.18B; every KPI reconciles to the raw source.
+- **🧠 AI Insight · 🔬 Hypothesis · ✅ Decision** panels on every page, written by DAX and recalculated on each slicer change.
+- **Left navigation panel** with page buttons, a **↺ Reset all filters** button and stacked slicers.
+- **🎛️ What-If Simulator:** CPA-reduction and budget-shift sliders recalculate contribution and ROI live.
+- **🛡️ Data Quality page:** 65 checks across 9 layers, shown as **DATA CERTIFIED** or **NOT CERTIFIED**.
+- **🧪 Experiment Decisions:** pre-registered A/B decision rule (SRM → guardrails → significance → MDE).
+- **Campaign Risk model** replaces the leaky churn label; the honest time-split AUC is 0.50.
+- **Drill-through** to a Campaign Detail page, a **KPI hover tooltip**, **RLS roles** (3 brands + All Brands) and a **Time Intelligence** calculation group.
+
+| Executive Overview | What-If Simulator |
+|---|---|
+| ![](powerbi/assets/v2/01_executive.jpg) | ![](powerbi/assets/v2/06b_whatif_scenario.jpg) |
+| **Data Quality & Trust Layer** | **Experiment Decisions** |
+| ![](powerbi/assets/v2/07_data_quality.jpg) | ![](powerbi/assets/v2/08_experiments.jpg) |
+| **Campaign Risk (under-performance model)** | **Campaign Detail (drill-through)** |
+| ![](powerbi/assets/v2/04_campaign_risk.jpg) | ![](powerbi/assets/v2/09_drillthrough.jpg) |
+
+Open `powerbi/dashboards/Ecommerce_Analytics.pbip` in Power BI Desktop. Data paths are set by the `ProjectRoot` parameter, and the full model documentation is in `Ecommerce_Analytics.SemanticModel/documentation/model-documentation.md`.
+
+---
+
+# 🛡️ **Data Quality Framework**
+
+A reusable, config-driven QA layer (`src/data_quality/`, rules in `config/dq_rules.yml`), 65 checks across 9 layers:
+
+```
+Data Quality Checks
+├── Duplicate records
+├── Null checks
+├── Referential integrity
+├── Date validity
+├── Negative values (+ funnel rules: conversions ≤ leads ≤ clicks ≤ impressions)
+├── Duplicate joins
+├── Unexpected row multiplication
+├── KPI reconciliation (raw ↔ processed, stored ROI ↔ definition)
+└── Source-to-report validation (Power BI KPI snapshot ↔ KPIs recomputed from raw)
+```
+
+```bash
+python -m src.data_quality.runner --config config/dq_rules.yml   # exits 1 on critical failures
+```
+Outputs `reports/dq/dq_results.csv` (feeds the Power BI *Data Quality* page) and `reports/dq/dq_report.md`.
+The source-to-report layer caught a 700x ROI overstatement in the dashboard. See [docs/PROJECT_AUDIT.md](docs/PROJECT_AUDIT.md).
+
+---
+
+# 🧪 **Experimentation & Decision-Making**
+
+`src/experimentation/` turns A/B results into a **pre-registered, deterministic decision**:
+
+1. **Pre-register** in `experiments/registry.yml`: hypothesis, primary metric, MDE, power, guardrails
+2. **Design**: sample size per arm, duration in whole weeks
+3. **Validity**: sample-ratio-mismatch (SRM) check
+4. **Readout**: z-test / Welch + CI on lift, CUPED, Bayesian P(better) + expected loss
+5. **Guardrails**: margin, refunds, unsubscribes → OK / AT RISK / BREACH
+6. **Decision**: SHIP · SHIP WITH MONITORING · DO NOT SHIP · KEEP RUNNING · INVALID, plus a decision memo
+
+| Test (simulated data) | Decision | Why |
+|---|---|---|
+| EXP-001 Free-shipping progress bar | SHIP WITH MONITORING | CVR +14.5%, refund guardrail CI still wide |
+| EXP-002 20% vs 10% influencer discount | DO NOT SHIP | CVR +10.6% but margin/user −28% |
+| EXP-003 WhatsApp 2h reminder | INVALID | SRM (53/47 split), assignment bug |
+| EXP-004 First-name subject line | DO NOT SHIP | CI rules out the 8% MDE |
+
+```bash
+python -m src.experimentation.simulate   # simulated, clearly-labelled test data
+python -m src.experimentation.decide     # memos -> reports/experiments/
+```
+
+---
+
 # 🗂️ **Project Folder Structure**
 
 ```
@@ -236,7 +314,7 @@ This analytics solution enables:
 
 ### 1. Clone the repository  
 ```
-git clone https://github.com/yourusername/ecommerce-customer-analytics.git
+git clone https://github.com/abdulrab787/ecommerce-customer-analytics.git
 ```
 
 ### 2. Open the Power BI dashboard  
@@ -278,4 +356,4 @@ sql/
 
 **Abdurrab**  
 Data Analyst | BI Developer | Power BI Specialist  
-Abu Dhabi, UAE  
+Dubai, UAE  

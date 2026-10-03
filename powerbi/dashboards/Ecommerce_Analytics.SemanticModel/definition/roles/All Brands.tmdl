@@ -1,0 +1,6 @@
+/// Unrestricted - admin / testing. Roles union with OR.
+role 'All Brands'
+	modelPermission: read
+
+	annotation PBI_Id = 7651d8e905df430c9c0ed5305f8d613d
+

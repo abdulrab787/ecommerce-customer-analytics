@@ -1,0 +1,42 @@
+table 'Time Intelligence'
+	lineageTag: ccb384b0-1361-495a-a90e-a83ba3d2abde
+
+	/// Switch any numeric measure between Current / MTD / QTD / YTD / Prior Month / MoM % / Rolling 3M. Affects every measure in the visual's filter context. Text measures pass through unchanged.
+	calculationGroup
+		precedence: 10
+
+		calculationItem Current = SELECTEDMEASURE ()
+
+		calculationItem MTD =
+				VAR v = SELECTEDMEASURE ()
+				RETURN IF ( ISNUMBER ( v ) || ISBLANK ( v ), CALCULATE ( SELECTEDMEASURE (), DATESMTD ( 'Date'[Date] ) ), v )
+
+		calculationItem QTD =
+				VAR v = SELECTEDMEASURE ()
+				RETURN IF ( ISNUMBER ( v ) || ISBLANK ( v ), CALCULATE ( SELECTEDMEASURE (), DATESQTD ( 'Date'[Date] ) ), v )
+
+		calculationItem YTD =
+				VAR v = SELECTEDMEASURE ()
+				RETURN IF ( ISNUMBER ( v ) || ISBLANK ( v ), CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Date'[Date] ) ), v )
+
+		calculationItem 'Prior Month' =
+				VAR v = SELECTEDMEASURE ()
+				RETURN IF ( ISNUMBER ( v ) || ISBLANK ( v ), CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[Date], -1, MONTH ) ), v )
+
+		calculationItem 'MoM %' =
+				VAR v = SELECTEDMEASURE ()
+				VAR pm = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[Date], -1, MONTH ) )
+				RETURN IF ( ISNUMBER ( v ), DIVIDE ( v - pm, pm ), v )
+
+			formatStringDefinition = IF ( ISNUMBER ( SELECTEDMEASURE () ), "+0.0%;-0.0%;0.0%", SELECTEDMEASUREFORMATSTRING () )
+
+		calculationItem 'Rolling 3M' =
+				VAR v = SELECTEDMEASURE ()
+				RETURN IF ( ISNUMBER ( v ) || ISBLANK ( v ), CALCULATE ( SELECTEDMEASURE (), DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -3, MONTH ) ), v )
+
+	column 'Time Intelligence'
+		dataType: string
+		lineageTag: 63bce203-c073-4143-a2e5-33adfece75a5
+
+	partition 'Partition_Time Intelligence' = calculationGroup
+

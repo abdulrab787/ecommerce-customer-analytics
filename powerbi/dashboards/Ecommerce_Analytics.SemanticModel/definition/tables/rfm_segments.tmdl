@@ -1,0 +1,92 @@
+table rfm_segments
+	lineageTag: e4ac1fd8-f949-4ed1-a726-d24f2f58903f
+
+	column Customer_Segment
+		dataType: string
+		lineageTag: 4e0c8837-4eb8-460d-a9d5-603e5cae30bb
+		summarizeBy: none
+		sourceColumn: Customer_Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column M_Score
+		dataType: int64
+		formatString: 0
+		lineageTag: ac5cfe03-cd22-4e96-b83d-8109c2d0316c
+		summarizeBy: none
+		sourceColumn: M_Score
+
+		annotation SummarizationSetBy = Automatic
+
+	column Frequency = ```
+			
+			CALCULATE(
+			    COUNTROWS(campaign_data)
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 44813a20-d2db-48c6-b68c-f3529c84e236
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Monetary = ```
+			
+			CALCULATE(
+			    SUM(campaign_data[revenue])
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 062965e6-ef84-4270-a5ca-bc64aab396da
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column F_Score = ```
+			
+			VAR RankF =
+			    RANKX(
+			        ALL(rfm_segments),
+			        rfm_segments[Frequency],
+			        ,
+			        DESC
+			    )
+			VAR TotalSeg =
+			    CALCULATE(COUNTROWS(rfm_segments), ALL(rfm_segments))
+			VAR Quantile =
+			    DIVIDE(RankF, TotalSeg)
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    Quantile <= 1/5, 5,
+			    Quantile <= 2/5, 4,
+			    Quantile <= 3/5, 3,
+			    Quantile <= 4/5, 2,
+			    1
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 14475265-afc3-450c-9dbe-9f60964426b0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition rfm_segments = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(ProjectRoot & "data\processed\rfm_segments.csv"),[Delimiter=",", Columns=9, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Customer_Segment", type text}, {"Recency", Int64.Type}, {"Frequency", Int64.Type}, {"Monetary", Int64.Type}, {"R_Score", Int64.Type}, {"F_Score", Int64.Type}, {"M_Score", Int64.Type}, {"RFM_Score", Int64.Type}, {"Segment", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Recency", "Frequency", "Monetary", "R_Score", "F_Score", "RFM_Score", "Segment"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

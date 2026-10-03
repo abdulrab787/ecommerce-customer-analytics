@@ -1,0 +1,22 @@
+// KPI snapshot used by the source-to-report validation layer.
+// Run in DAX Studio (or the Power BI MCP) against the open model and save the
+// result as reports/dq/powerbi_kpi_snapshot.csv  (columns: kpi,value)
+EVALUATE
+UNION(
+    ROW("kpi","total_revenue",     "value",[Total Revenue]),
+    ROW("kpi","total_spend",       "value",[Total Spend]),
+    ROW("kpi","roi",               "value",[ROI]),
+    ROW("kpi","roas",              "value",[ROAS]),
+    ROW("kpi","total_impressions", "value",[Total Impressions]),
+    ROW("kpi","total_clicks",      "value",[Total Clicks]),
+    ROW("kpi","total_leads",       "value",[Total Leads]),
+    ROW("kpi","total_conversions", "value",[Total Conversions]),
+    ROW("kpi","ctr",               "value",[CTR]),
+    ROW("kpi","avg_ctr",           "value",[Avg CTR]),
+    ROW("kpi","conversion_rate",   "value",[Conversion Rate]),
+    ROW("kpi","cpa",               "value",[CPA]),
+    ROW("kpi","cpl",               "value",[CPL]),
+    ROW("kpi","net_profit",        "value",[Net Profit]),
+    ROW("kpi","churn_rate",        "value",[Churn Rate]),
+    ROW("kpi","campaign_rows",     "value",COUNTROWS(campaign_data))
+)

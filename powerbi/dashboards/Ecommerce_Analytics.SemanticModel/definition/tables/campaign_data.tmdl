@@ -1,0 +1,327 @@
+table campaign_data
+	lineageTag: 83f41d00-b2c0-4caf-9301-49834f73d480
+
+	/// 0-100 index vs current selection; 50 = average.
+	measure 'Performance Score' =
+			VAR _ctr  = DIVIDE ( [CTR],             CALCULATE ( [CTR],             ALLSELECTED ( campaign_data ) ) )
+			VAR _cvr  = DIVIDE ( [Conversion Rate], CALCULATE ( [Conversion Rate], ALLSELECTED ( campaign_data ) ) )
+			VAR _roas = DIVIDE ( [ROAS],            CALCULATE ( [ROAS],            ALLSELECTED ( campaign_data ) ) )
+			VAR _cpa  = DIVIDE ( CALCULATE ( [CPA], ALLSELECTED ( campaign_data ) ), [CPA] )
+			VAR _idx  = 0.2 * _ctr + 0.3 * _cvr + 0.3 * _roas + 0.2 * _cpa
+			RETURN IF ( NOT ISBLANK ( [Total Revenue] ), MIN ( 100, MAX ( 0, 50 * _idx ) ) )
+		formatString: 0.0
+		displayFolder: _Performance
+		lineageTag: bd102f4f-19ac-4f49-9354-e5c404a4dd0d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Performance Segment' =
+			VAR s = [Performance Score]
+			RETURN SWITCH ( TRUE (), ISBLANK ( s ), BLANK (), s >= 55, "High", s >= 45, "Medium", "Low" )
+		displayFolder: _Performance
+		lineageTag: 0f5517dc-7d77-499e-b4f4-f419d4d787d0
+
+	column campaign_id
+		dataType: string
+		lineageTag: 38834a58-2157-4d37-b981-2e2ad5fead3c
+		summarizeBy: none
+		sourceColumn: campaign_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column campaign_type
+		dataType: string
+		lineageTag: fe4c35c7-8ddd-4832-9b18-37114be3e869
+		summarizeBy: none
+		sourceColumn: campaign_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_audience
+		dataType: string
+		isHidden
+		lineageTag: 3547285a-fbe5-414e-bf52-85c939b4d7fe
+		summarizeBy: none
+		sourceColumn: target_audience
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a4775cac-b45a-4ab8-89e0-b204526ec1f1
+		summarizeBy: sum
+		sourceColumn: duration
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_used
+		dataType: string
+		lineageTag: 8266123d-3da0-45e8-bba7-0763ef7f1d70
+		summarizeBy: none
+		sourceColumn: channel_used
+
+		annotation SummarizationSetBy = Automatic
+
+	column impressions
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1305a3bf-b322-466e-95fd-627dd8dcf150
+		summarizeBy: sum
+		sourceColumn: impressions
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column clicks
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4925325f-4417-4cc6-8645-bc81db533860
+		summarizeBy: sum
+		sourceColumn: clicks
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column leads
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9a5a5dc0-17d8-4c9b-b9c9-b9fa173091f3
+		summarizeBy: sum
+		sourceColumn: leads
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column conversions
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 59a31509-33e6-4349-8a71-0407fe00a185
+		summarizeBy: sum
+		sourceColumn: conversions
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column revenue
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 55a62433-9e87-4660-ab98-748bd9c856e7
+		summarizeBy: sum
+		sourceColumn: revenue
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column acquisition_cost
+		dataType: double
+		isHidden
+		lineageTag: 5fef4a8c-8fbc-4d66-92f9-7be76ba21518
+		summarizeBy: sum
+		sourceColumn: acquisition_cost
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column roi
+		dataType: double
+		isHidden
+		lineageTag: ae8cc8e9-c045-4c08-8821-7e1317866c48
+		summarizeBy: sum
+		sourceColumn: roi
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column language
+		dataType: string
+		isHidden
+		lineageTag: 9a4b8716-01dd-49ce-9d74-33246c08476a
+		summarizeBy: none
+		sourceColumn: language
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column engagement_score
+		dataType: double
+		isHidden
+		lineageTag: bc6c898f-726c-42d6-8f0e-3a8edbe28c3d
+		summarizeBy: sum
+		sourceColumn: engagement_score
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column customer_segment
+		dataType: string
+		lineageTag: 488fcbe1-0f7f-4992-960d-c8e74c2bcb9a
+		summarizeBy: none
+		sourceColumn: customer_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 43440874-6efc-4fe0-b03c-7be879ec9dc3
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CTR
+		dataType: double
+		isHidden
+		lineageTag: fa6225a3-6be4-4567-84c2-3b1ff80dc99a
+		summarizeBy: sum
+		sourceColumn: CTR
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Conversion_Rate
+		dataType: double
+		isHidden
+		lineageTag: d484c752-114b-477a-b924-50f0dc553b57
+		summarizeBy: sum
+		sourceColumn: Conversion_Rate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CPL
+		dataType: double
+		isHidden
+		lineageTag: 86e7302b-ba68-448e-a7dc-e55e86ede61b
+		summarizeBy: sum
+		sourceColumn: CPL
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CPCV
+		dataType: double
+		isHidden
+		lineageTag: 85a00a7a-7990-4b70-9fdc-ee281ae0c449
+		summarizeBy: sum
+		sourceColumn: CPCV
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Days before the last date in the data (reproducible; no TODAY()).
+	column Recency = DATEDIFF ( campaign_data[date], MAX ( campaign_data[date] ), DAY )
+		formatString: 0
+		lineageTag: 8425cb0b-671c-427c-a46a-5fc7ed064384
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment = ```
+			
+			campaign_data[campaign_type]
+			    & " | "
+			    & campaign_data[target_audience]
+			    & " | "
+			    & campaign_data[channel_used]
+			
+			```
+		lineageTag: 34822fa4-45ee-4084-bae3-d6454e246fef
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Brand / platform derived from campaign_id prefix (NY=Nykaa, PU=Purplle, TI=Tira).
+	column platform
+		dataType: string
+		displayFolder: Dimensions
+		lineageTag: bb16e631-3a53-43f3-ad9e-86d26936a3ff
+		summarizeBy: none
+		sourceColumn: platform
+
+	hierarchy 'CTR Hierarchy'
+		lineageTag: f302b108-29aa-4a0b-b155-124723971a6b
+
+		level CTR
+			lineageTag: d70d792a-46cb-4521-acec-c2934b0ca6a1
+			column: CTR
+
+	hierarchy 'CPL Hierarchy'
+		isHidden
+		lineageTag: cea4a24d-edcf-437b-91e2-79e9d74fe1e8
+
+		level CPL
+			lineageTag: 086f261f-3fee-4478-b7b2-d44ed1efc74b
+			column: CPL
+
+		changedProperty = IsHidden
+
+	hierarchy 'CPCV Hierarchy'
+		isHidden
+		lineageTag: 073a1280-7b06-4db6-b7d8-889f338a427f
+
+		level CPCV
+			lineageTag: f860a4f7-5d5a-4a51-87e1-792fac736b67
+			column: CPCV
+
+		changedProperty = IsHidden
+
+	partition campaign_data = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(ProjectRoot & "data\processed\campaign_data_cleaned.csv"),[Delimiter=",", Columns=20, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"campaign_id", type text}, {"campaign_type", type text}, {"target_audience", type text}, {"duration", Int64.Type}, {"channel_used", type text}, {"impressions", Int64.Type}, {"clicks", Int64.Type}, {"leads", Int64.Type}, {"conversions", Int64.Type}, {"revenue", Int64.Type}, {"acquisition_cost", type number}, {"roi", type number}, {"language", type text}, {"engagement_score", type number}, {"customer_segment", type text}, {"date", type date}, {"CTR", type number}, {"Conversion_Rate", type number}, {"CPL", type number}, {"CPCV", type number}}),
+				    #"Added Platform" = Table.AddColumn(#"Changed Type", "platform", each
+				        let p = Text.Start([campaign_id], 2) in
+				        if p = "NY" then "Nykaa" else if p = "PU" then "Purplle" else if p = "TI" then "Tira" else "Unknown", type text)
+				in
+				    #"Added Platform"
+
+	changedProperty = Name
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,95 @@
+table Date
+	lineageTag: 8890a380-eeea-4f26-8f63-1a629fb192db
+	dataCategory: Time
+
+	measure 'Measure 3'
+		isHidden
+		lineageTag: 4507c4c2-9f60-4b1c-befe-397b7ba57bc4
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure 'Campaign Row Count (Filtered)' = ```
+			
+			COUNTROWS( campaign_data )
+			
+			```
+		formatString: 0
+		lineageTag: 6ccfad88-3221-4467-b393-d0c996cfd234
+
+	measure 'Distinct Campaign Count' = ```
+			
+			DISTINCTCOUNT(campaign_data[campaign_id])
+			
+			```
+		formatString: 0
+		lineageTag: af97de9b-6a3e-4d83-8703-dabd8119b314
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: 0160597c-31a7-48af-ad66-1b0009ef9dfb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 78f96764-8057-40f6-8af0-43a67507de16
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number'
+		formatString: 0
+		lineageTag: 4b3a2123-bee7-49f8-a208-0451377d5a46
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Month Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		lineageTag: 8823c6c9-802e-4c4d-bb23-57080ac40c5b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: 1f046730-9903-4336-a4e8-5a9239a08c03
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year-Month
+		lineageTag: b17ff761-38df-4f3c-8e44-1df73c3e96be
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year-Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Date = calculated
+		mode: import
+		source = ```
+				
+				ADDCOLUMNS (
+				    CALENDAR ( MIN(campaign_data[date]), MAX(campaign_data[date]) ),
+				    "Year", YEAR([Date]),
+				    "Month Number", MONTH([Date]),
+				    "Month Name", FORMAT([Date], "MMMM"),
+				    "Quarter", "Q" & FORMAT([Date], "Q"),
+				    "Year-Month", FORMAT([Date], "YYYY-MM")
+				)
+				
+				```
+
+	annotation PBI_Id = c86295999fb74f6bad8b21e3aebc75d9
+

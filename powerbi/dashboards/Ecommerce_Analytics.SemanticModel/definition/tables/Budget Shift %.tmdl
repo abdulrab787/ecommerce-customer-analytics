@@ -1,0 +1,22 @@
+table 'Budget Shift %'
+	lineageTag: 8f385c5b-8fe0-4ed0-96ca-51715542e9ca
+
+	column 'Budget Shift %'
+		formatString: 0%
+		lineageTag: 455e5f41-3b5f-44c2-9f86-e7dc475b596a
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition 'Budget Shift %' = calculated
+		mode: import
+		source = GENERATESERIES ( 0, 0.5, 0.05 )
+
+	annotation PBI_Id = f5c5d343c7ee4184aad2d7af930d1af0
+

@@ -1,0 +1,31 @@
+relationship AutoDetected_90e54abb-a7c2-4459-a127-14b76f6120c9
+	fromColumn: rfm_segments.Customer_Segment
+	toColumn: clv_segments.customer_segment
+
+relationship 3d1c37ce-f6e6-c24f-0b93-0f35512752c7
+	fromColumn: campaign_data.date
+	toColumn: Date.Date
+
+relationship d860a46d-714a-3174-e500-87138fde3f96
+	fromColumn: churn_predictions.date
+	toColumn: Date.Date
+
+relationship 433afcba-23ae-4356-c085-b4735779ede9
+	fromColumn: campaign_data.customer_segment
+	toColumn: rfm_segments.Customer_Segment
+
+relationship 466ae55d-4686-fd83-74ed-b9c91b64ea45
+	fromColumn: churn_predictions.customer_segment
+	toColumn: clv_segments.customer_segment
+
+relationship cde7b4c6-0055-c21a-1b33-8153884173fb
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: churn_predictions.campaign_id
+	toColumn: campaign_data.campaign_id
+
+relationship experiment_metrics_experiment_id_experiment_decisions_experiment_id
+	fromColumn: experiment_metrics.experiment_id
+	toColumn: experiment_decisions.experiment_id
+

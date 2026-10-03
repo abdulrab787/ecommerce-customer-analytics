@@ -1,0 +1,40 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-AE
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["campaign_data","churn_predictions","clv_segments","rfm_segments"]
+
+annotation __TEdtr = 1
+
+annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling"]
+
+ref table campaign_data
+ref table churn_predictions
+ref table clv_segments
+ref table rfm_segments
+ref table Date
+ref table 'Measure''s'
+ref table RFM_Segment_Table
+ref table Table
+ref table Waterfall_Steps
+ref table dq_results
+ref table experiment_decisions
+ref table experiment_metrics
+ref table 'Time Intelligence'
+ref table 'Budget Shift %'
+ref table 'CPA Reduction %'
+
+ref role 'Brand - Nykaa'
+ref role 'Brand - Purplle'
+ref role 'Brand - Tira'
+ref role 'All Brands'
+
+ref cultureInfo en-US
+
