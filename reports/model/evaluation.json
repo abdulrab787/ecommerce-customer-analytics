@@ -1,0 +1,21 @@
+{
+  "model": "LogisticRegression(class_weight='balanced') on pre-launch attributes",
+  "label": "roi < train-period P25 (underperforming campaign)",
+  "split": "time-based: train date < 2025-03-01, test date >= 2025-03-01",
+  "train_rows": 117084,
+  "test_rows": 49581,
+  "test_positive_rate": 0.2464,
+  "roc_auc": 0.4996,
+  "pr_auc": 0.2449,
+  "pr_auc_random_baseline": 0.2464,
+  "precision": 0.2442,
+  "recall": 0.2389,
+  "f1": 0.2415,
+  "confusion_matrix": {
+    "tn": 28327,
+    "fp": 9036,
+    "fn": 9299,
+    "tp": 2919
+  },
+  "interpretation": "ROC-AUC ~0.50 and precision ~= the positive rate: pre-launch campaign attributes carry no usable signal for predicting under-performance."
+}

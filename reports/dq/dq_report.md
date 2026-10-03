@@ -1,6 +1,6 @@
 # Data Quality Report
 
-Run: 2026-10-03 05:58:55  
+Run: 2026-10-03 13:08:49  
 
 **63 pass · 2 warn · 0 fail** out of 65 checks
 

@@ -13,6 +13,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.feature_engineering import add_campaign_metrics
+
 RAW = {"Nykaa": "nykaa", "Purplle": "purplle", "Tira": "tira"}
 COLS = ["campaign_id", "campaign_type", "target_audience", "duration", "channel_used", "impressions",
         "clicks", "leads", "conversions", "revenue", "acquisition_cost", "roi", "language",
@@ -28,11 +30,7 @@ def build(root: Path = Path(".")) -> pd.DataFrame:
         parts.append(d)
     df = pd.concat(parts, ignore_index=True)
     df["date"] = pd.to_datetime(df["date"], format="%d-%m-%Y").dt.date
-    spend = df["acquisition_cost"] * df["conversions"]
-    df["CTR"] = df["clicks"] / df["impressions"]
-    df["Conversion_Rate"] = df["conversions"] / df["clicks"]
-    df["CPL"] = spend / df["leads"]             # spend per lead
-    df["CPCV"] = df["acquisition_cost"]         # spend per conversion
+    df = add_campaign_metrics(df)
     return df[COLS]
 
 

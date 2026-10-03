@@ -1,6 +1,6 @@
 # Project Audit — ecommerce-customer-analytics
 
-Audit date: 2026-10-02 · Scope: GitHub repo + live Power BI model (`Ecommerce_Analytics.pbix`, 9 tables, 6 relationships, 100 measures) · Method: every KPI re-computed from the raw CSVs and compared against DAX query results from the open model.
+Audit date: 2026-10-02 · Scope: GitHub repo + live Power BI model (`Ecommerce_Analytics.pbix`, 9 tables, 6 relationships, 100 measures; that legacy file has since been removed from the repository, and the current report is `powerbi/dashboards/Ecommerce_Analytics.pbip`) · Method: every KPI re-computed from the raw CSVs and compared against DAX query results from the open model.
 
 ## TL;DR
 

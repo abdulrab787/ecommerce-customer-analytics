@@ -1,0 +1,11 @@
+check_id,check_name,failing_rows,status
+SQL-DQ01,"campaign_id unique (raw, processed, predictions)",0,PASS
+SQL-DQ02,required fields not null,0,PASS
+SQL-DQ03,funnel order and non-negative measures,0,PASS
+SQL-DQ04,raw dates parse (dd-mm-yyyy) and are in range,0,PASS
+SQL-DQ05,raw ROI matches per-conversion cost definition,0,PASS
+SQL-DQ06,"raw vs processed totals per platform (rows, revenue, conversions, spend)",0,PASS
+SQL-DQ07,"referential integrity (predictions -> campaigns, campaigns -> segment tables)",0,PASS
+SQL-DQ08,no row multiplication when joining fact to segment tables,0,PASS
+SQL-DQ10,raw schema has exactly the expected columns,0,PASS
+SQL-DQ09,SQL KPIs reconcile to Python definitions and Power BI snapshot (+-0.5%),0,PASS
